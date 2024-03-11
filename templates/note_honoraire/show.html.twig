@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}NoteHonoraire{% endblock %}
+
+{% block body %}
+    <h1>NoteHonoraire</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ note_honoraire.id }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ note_honoraire.numero }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ note_honoraire.date ? note_honoraire.date|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_note_honoraire_index') }}">back to list</a>
+
+    <a href="{{ path('app_note_honoraire_edit', {'id': note_honoraire.id}) }}">edit</a>
+
+    {{ include('note_honoraire/_delete_form.html.twig') }}
+{% endblock %}
