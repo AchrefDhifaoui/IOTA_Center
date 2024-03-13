@@ -1,13 +1,149 @@
-{% extends 'base.html.twig' %}
+{% extends 'template.html.twig' %}
 
 {% block title %}Edit NoteHonoraire{% endblock %}
 
 {% block body %}
-    <h1>Edit NoteHonoraire</h1>
+    <div class="container-xl">
+        <div class="card" style="margin: 17px; height: 75px ">
 
-    {{ include('note_honoraire/_form.html.twig', {'button_label': 'Update'}) }}
+            <div class="row row-cards">
+                <div class="col-12">
+                    <div class="card">
+                        {{ form_start(form) }}
+                        <div class="card-body">
+                            <h3 class="card-title">Edit Note d'honoraire</h3>
+                            <div class="row row-cards">
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-3">
+                                        {{ form_row(form.formateur) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-3">
+                                        {{ form_row(form.client) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-3">
+                                        {{ form_row(form.date) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-3">
+                                        {{ form_row(form.numero) }}
+                                    </div>
+                                </div>
 
-    <a href="{{ path('app_note_honoraire_index') }}">back to list</a>
 
-    {{ include('note_honoraire/_delete_form.html.twig') }}
+                                {% for ligne in form.ligneNoteHonoraires %}
+                                <div class="container-xl" >
+                                <div class="card" id="ligne" style="margin: 15px;padding: 15px">
+                                    <div class="row row-cards">
+                                    <div class="col-sm-5 col-md-3">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.designation) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 col-md-2">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.qantite) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 col-md-2">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.prixUnitaire) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 col-md-3">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.prixTotalHT) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 col-md-2">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.unite) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                </div>
+                                {% endfor %}
+                                <div class="tags"
+                                     data-index="{{ form.ligneNoteHonoraires|length > 0 ? form.ligneNoteHonoraires|last.vars.name + 1 : 0 }}"
+                                     data-prototype="{{ form_widget(form.ligneNoteHonoraires.vars.prototype)|e('html_attr') }}"
+                                ></div>
+
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="button" class="btn btn-primary" id="addLigne" data-collection-holder-class="tags">Add a ligne</button>
+                            <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document
+            .querySelectorAll('#addLigne')
+            .forEach(btn => {
+                btn.addEventListener("click", addFormToCollection)
+            });
+        document
+            .querySelectorAll('div#ligne ')
+            .forEach((tag) => {
+                addTagFormDeleteLink(tag)
+            })
+
+        function addFormToCollection(e) {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('div');
+            item.className="card";
+            item.style.padding="15px"
+            item.style.margin="15px"
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+            item.querySelector('div').classList.add('row', 'mb-3', 'align-items-end');
+            item.querySelectorAll('div > div').forEach(col => {
+                col.classList.add('col');
+            });
+
+            collectionHolder.appendChild(item);
+
+            collectionHolder.dataset.index++;
+            addTagFormDeleteLink(item);
+        }
+
+        function addTagFormDeleteLink(item) {
+            const removeFormButton = document.createElement('button');
+            removeFormButton.innerText = 'Delete this Ligne';
+            removeFormButton.classList.add('btn', 'btn-danger'); // Adding Bootstrap classes for styling
+
+            // Wrap the delete button in a div with class col-1
+            const deleteWrapper = document.createElement('div');
+            deleteWrapper.appendChild(removeFormButton);
+            item.appendChild(deleteWrapper);
+
+            removeFormButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                // remove the div for the tag form
+                item.remove();
+            });
+        }
+    </script>
+
+
+
+
+
 {% endblock %}

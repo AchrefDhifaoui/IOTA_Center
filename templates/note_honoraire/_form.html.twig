@@ -20,7 +20,7 @@
     data-index="{{ form.ligneNoteHonoraires|length > 0 ? form.ligneNoteHonoraires|last.vars.name + 1 : 0 }}"
     data-prototype="{{ form_widget(form.ligneNoteHonoraires.vars.prototype)|e('html_attr') }}"
 ></ul>
-    <button type="button" class="add_item_link" data-collection-holder-class="tags">Add a tag</button>
+<button type="button" class="add_item_link" data-collection-holder-class="tags">Add a tag</button>
 
 <script>
     document
@@ -38,6 +38,7 @@
         const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
         const item = document.createElement('li');
+        item.style.display="inline";
 
         item.innerHTML = collectionHolder
             .dataset
@@ -65,5 +66,5 @@
         });
     }
 </script>
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

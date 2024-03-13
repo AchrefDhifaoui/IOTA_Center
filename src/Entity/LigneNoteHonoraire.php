@@ -13,7 +13,7 @@ class LigneNoteHonoraire
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?FormationAssurer $designation = null;
 
@@ -26,8 +26,9 @@ class LigneNoteHonoraire
     #[ORM\Column]
     private ?float $prixTotalHT = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ligneNoteHonoraires')]
+    #[ORM\ManyToOne(inversedBy: 'ligneNoteHonoraires', cascade: ['remove'])]
     private ?NoteHonoraire $noteHonoraire = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'ligneNoteHonoraires')]
     private ?Unite $unite = null;

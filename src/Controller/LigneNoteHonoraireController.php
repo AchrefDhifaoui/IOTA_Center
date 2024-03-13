@@ -6,6 +6,7 @@ use App\Entity\LigneNoteHonoraire;
 use App\Form\LigneNoteHonoraireType;
 use App\Repository\LigneNoteHonoraireRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,13 +69,12 @@ class LigneNoteHonoraireController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ligne_note_honoraire_delete', methods: ['POST'])]
-    public function delete(Request $request, LigneNoteHonoraire $ligneNoteHonoraire, EntityManagerInterface $entityManager): Response
+    #[Route('/delete/{id}', name: 'app_ligne_note_honoraire_delete', methods: ['POST'])]
+    public function delete(Request $request, LigneNoteHonoraire $ligneNoteHonoraire, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ligneNoteHonoraire->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($ligneNoteHonoraire);
-            $entityManager->flush();
-        }
+        $manager = $doctrine->getManager();
+        $manager->remove($ligneNoteHonoraire);
+        $manager->flush();
 
         return $this->redirectToRoute('app_ligne_note_honoraire_index', [], Response::HTTP_SEE_OTHER);
     }
