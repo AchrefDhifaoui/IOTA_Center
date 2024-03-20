@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class LigneNoteHonoraireType extends AbstractType
 {
@@ -24,33 +26,31 @@ class LigneNoteHonoraireType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'label' => 'Designation',
                 'label_attr' => ['class' => 'form-label'],
+                'placeholder' => 'Choose a formation', // Add a placeholder
+                'required' => false,
 
             ])
-            ->add('qantite', IntegerType::class, [
-        'attr' => ['class' => 'form-control'],
-        'label' => 'quantité',
-        'label_attr' => ['class' => 'form-label'],
-    ])
-            ->add('prixUnitaire', NumberType::class, [
+            ->add('qantite', null, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'quantité',
+                'label_attr' => ['class' => 'form-label'],
+            ])
+            ->add('prixUnitaire', null, [
                 'attr' => ['class' => 'form-control'],
                 'label' => 'PU',
                 'label_attr' => ['class' => 'form-label'],
-            ])
-            ->add('prixTotalHT', NumberType::class, [
-                'attr' => ['class' => 'form-control'],
-                'label' => 'PTHT',
-                'label_attr' => ['class' => 'form-label'],
-            ])
-
-
-            ->add('unite', EntityType::class, [
+            ])->add('unite', EntityType::class, [
                 'class' => Unite::class,
                 'choice_label' => 'titre',
                 'attr' => ['class' => 'form-control'],
                 'label' => 'Unite',
                 'label_attr' => ['class' => 'form-label'],
             ])
-        ;
+            ->add('prixTotalHT', NumberType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'PTHT',
+                'label_attr' => ['class' => 'form-label'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -58,5 +58,10 @@ class LigneNoteHonoraireType extends AbstractType
         $resolver->setDefaults([
             'data_class' => LigneNoteHonoraire::class,
         ]);
+
     }
+
+
+
+
 }

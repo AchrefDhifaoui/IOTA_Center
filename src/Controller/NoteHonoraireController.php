@@ -61,9 +61,25 @@ class NoteHonoraireController extends AbstractController
     #[Route('/pdf/{id}', name: 'app_note_honoraire_print', methods: ['GET'])]
     public function show(NoteHonoraire $noteHonoraire,PdfService $pdf, Environment $twig): Response
     {
+        $netTotal = 0;
+        foreach ($noteHonoraire->getLigneNoteHonoraires() as $ligne) {
+            $netTotal += $ligne->getPrixTotalHT();
+        }
+        $tva = $noteHonoraire->getTva();
+        if ($tva) {
+            $vatRate = $tva->getTva() / 100;
+            $vatTotal = $netTotal * $vatRate;
+        } else {
+            $vatTotal = 0;
+        }
+        $totalIncludingVAT = $netTotal + $vatTotal;
         $htmlContent = $twig->render('note_honoraire/show.html.twig', [
             'note_honoraire' => $noteHonoraire,
+            'netTotal' => $netTotal,
+            'vatTotal' => $vatTotal,
+            'totalIncludingVAT' => $totalIncludingVAT,
         ]);
+
         $pdfContent = $pdf->generateBinaryPDF($htmlContent);
 
         // Create a Response object with the PDF content

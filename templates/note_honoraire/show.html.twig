@@ -828,18 +828,18 @@
                                         <tbody>
                                         <tr>
                                             <td class="border-b p-3">
-                                                <div class="whitespace-nowrap text-slate-400">Net total:</div>
+                                                <div class="whitespace-nowrap text-slate-400"> total des Honoraires:</div>
                                             </td>
                                             <td class="border-b p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-main">$320.00</div>
+                                                <div class="whitespace-nowrap font-bold text-main">{{ netTotal }}</div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="p-3">
-                                                <div class="whitespace-nowrap text-slate-400">VAT total:</div>
+                                                <div class="whitespace-nowrap text-slate-400">TVA total:</div>
                                             </td>
                                             <td class="p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-main">$64.00</div>
+                                                <div class="whitespace-nowrap font-bold text-main">{{ vatTotal }}</div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -847,7 +847,7 @@
                                                 <div class="whitespace-nowrap font-bold text-white">Total:</div>
                                             </td>
                                             <td class="bg-main p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-white">$384.00</div>
+                                                <div class="whitespace-nowrap font-bold text-white">{{ totalIncludingVAT }}</div>
                                             </td>
                                         </tr>
                                         </tbody>

@@ -33,6 +33,12 @@ class NoteHonoraire
     #[ORM\JoinColumn(nullable: false)]
     private ?Formateur $formateur = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $etat = null;
+
+    #[ORM\ManyToOne]
+    private ?TVA $tva = null;
+
     public function __construct()
     {
         $this->ligneNoteHonoraires = new ArrayCollection();
@@ -117,6 +123,30 @@ class NoteHonoraire
     public function setFormateur(?Formateur $formateur): static
     {
         $this->formateur = $formateur;
+
+        return $this;
+    }
+
+    public function isEtat(): ?bool
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?bool $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getTva(): ?TVA
+    {
+        return $this->tva;
+    }
+
+    public function setTva(?TVA $tva): static
+    {
+        $this->tva = $tva;
 
         return $this;
     }

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FormationAssurer{% endblock %}
+
+{% block body %}
+    <h1>FormationAssurer</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ formation_assurer.id }}</td>
+            </tr>
+            <tr>
+                <th>DateDebut</th>
+                <td>{{ formation_assurer.dateDebut ? formation_assurer.dateDebut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Unite</th>
+                <td>{{ formation_assurer.unite }}</td>
+            </tr>
+            <tr>
+                <th>Quantite</th>
+                <td>{{ formation_assurer.quantite }}</td>
+            </tr>
+            <tr>
+                <th>PrixUnitaire</th>
+                <td>{{ formation_assurer.prixUnitaire }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_formation_assurer_index') }}">back to list</a>
+
+    <a href="{{ path('app_formation_assurer_edit', {'id': formation_assurer.id}) }}">edit</a>
+
+    {{ include('formation_assurer/_delete_form.html.twig') }}
+{% endblock %}

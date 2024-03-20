@@ -18,6 +18,8 @@ class LigneNoteHonoraireController extends AbstractController
     #[Route('/', name: 'app_ligne_note_honoraire_index', methods: ['GET'])]
     public function index(LigneNoteHonoraireRepository $ligneNoteHonoraireRepository): Response
     {
+        $ligneNoteHonoraire = $ligneNoteHonoraireRepository->find(1);
+        dump($ligneNoteHonoraire);
         return $this->render('ligne_note_honoraire/index.html.twig', [
             'ligne_note_honoraires' => $ligneNoteHonoraireRepository->findAll(),
         ]);

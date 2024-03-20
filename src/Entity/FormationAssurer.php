@@ -25,8 +25,8 @@ class FormationAssurer
     #[ORM\Column]
     private ?int $quantite = null;
 
-    #[ORM\Column]
-    private ?float $prixTotal = null;
+    #[ORM\Column(name: "prix_unitaire")]
+    private ?float $prixUnitaire = null;
 
     #[ORM\ManyToOne(inversedBy: 'formationAssurer')]
     #[ORM\JoinColumn(nullable: false)]
@@ -84,14 +84,14 @@ class FormationAssurer
         return $this;
     }
 
-    public function getPrixTotal(): ?float
+    public function getPrixUnitaire(): ?float
     {
-        return $this->prixTotal;
+        return $this->prixUnitaire;
     }
 
-    public function setPrixTotal(float $prixTotal): static
+    public function setPrixUnitaire(float $prixUnitaire): static
     {
-        $this->prixTotal = $prixTotal;
+        $this->$prixUnitaire = $prixUnitaire;
 
         return $this;
     }

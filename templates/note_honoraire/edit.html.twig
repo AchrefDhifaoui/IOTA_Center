@@ -23,14 +23,24 @@
                                         {{ form_row(form.client) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3">
+                                <div class="col-sm-6 col-md-2">
                                     <div class="mb-3">
                                         {{ form_row(form.date) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="mb-3">
+                                <div class="col-sm-6 col-md-2">
+                                    <div class="mb-2">
                                         {{ form_row(form.numero) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-1">
+                                    <div class="mb-1">
+                                        {{ form_row(form.etat) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-1">
+                                    <div class="mb-1">
+                                        {{ form_row(form.tva) }}
                                     </div>
                                 </div>
 
@@ -54,16 +64,17 @@
                                             {{ form_row(ligne.prixUnitaire) }}
                                         </div>
                                     </div>
+                                        <div class="col-sm-5 col-md-2">
+                                            <div class="mb-2">
+                                                {{ form_row(ligne.unite) }}
+                                            </div>
+                                        </div>
                                     <div class="col-sm-5 col-md-3">
                                         <div class="mb-2">
                                             {{ form_row(ligne.prixTotalHT) }}
                                         </div>
                                     </div>
-                                    <div class="col-sm-5 col-md-2">
-                                        <div class="mb-2">
-                                            {{ form_row(ligne.unite) }}
-                                        </div>
-                                    </div>
+
                                 </div>
                                 </div>
                                 </div>
@@ -81,6 +92,35 @@
                             <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
 
                         </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                function updatePrixTotalHT(element) {
+                                    var ligneContainer = element.closest('.row');
+                                    var prixUnitaireField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixUnitaire"]');
+                                    var quantiteField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_qantite"]');
+                                    var prixTotalHTField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixTotalHT"]');
+                                    if (!prixUnitaireField || !quantiteField || !prixTotalHTField) {
+                                        return;
+                                    }
+                                    var prixUnitaire = parseFloat(prixUnitaireField.value);
+                                    var quantite = parseInt(quantiteField.value);
+                                    var prixTotalHT = prixUnitaire * quantite;
+                                    prixTotalHTField.value = prixTotalHT.toFixed(2);
+                                }
+                                function handleInput(event) {
+                                    var target = event.target;
+                                    if (target.id.includes('_prixUnitaire') || target.id.includes('_qantite')) {
+                                        updatePrixTotalHT(target);
+                                    }
+                                }
+                                document.addEventListener('input', handleInput);
+                            });
+
+
+
+
+                        </script>
+
                         {{ form_end(form) }}
                     </div>
                 </div>
