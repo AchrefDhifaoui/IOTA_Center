@@ -21,9 +21,14 @@ class Unite
     #[ORM\OneToMany(targetEntity: LigneNoteHonoraire::class, mappedBy: 'unite')]
     private Collection $ligneNoteHonoraires;
 
+    #[ORM\OneToMany(targetEntity: FormationAssurer::class, mappedBy: 'unite')]
+    private Collection $formationAssurers;
+
+
     public function __construct()
     {
         $this->ligneNoteHonoraires = new ArrayCollection();
+        $this->formationAssurers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +72,36 @@ class Unite
             // set the owning side to null (unless already changed)
             if ($ligneNoteHonoraire->getUnite() === $this) {
                 $ligneNoteHonoraire->setUnite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FormationAssurer>
+     */
+    public function getFormationAssurers(): Collection
+    {
+        return $this->formationAssurers;
+    }
+
+    public function addFormationAssurer(FormationAssurer $formationAssurer): static
+    {
+        if (!$this->formationAssurers->contains($formationAssurer)) {
+            $this->formationAssurers->add($formationAssurer);
+            $formationAssurer->setUnite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationAssurer(FormationAssurer $formationAssurer): static
+    {
+        if ($this->formationAssurers->removeElement($formationAssurer)) {
+            // set the owning side to null (unless already changed)
+            if ($formationAssurer->getUnite() === $this) {
+                $formationAssurer->setUnite(null);
             }
         }
 

@@ -19,9 +19,6 @@ class FormationAssurer
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDebut = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $unite = null;
-
     #[ORM\Column]
     private ?int $quantite = null;
 
@@ -37,6 +34,9 @@ class FormationAssurer
 
     #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'formationAssurers')]
     private Collection $client;
+
+    #[ORM\ManyToOne(inversedBy: 'formationAssurers')]
+    private ?Unite $unite = null;
 
     public function __construct()
     {
@@ -60,17 +60,7 @@ class FormationAssurer
         return $this;
     }
 
-    public function getUnite(): ?string
-    {
-        return $this->unite;
-    }
 
-    public function setUnite(string $unite): static
-    {
-        $this->unite = $unite;
-
-        return $this;
-    }
 
     public function getQuantite(): ?int
     {
@@ -147,5 +137,17 @@ class FormationAssurer
     public function __toString(): string
     {
         return $this->formation->getTitre();
+    }
+
+    public function getUnite(): ?Unite
+    {
+        return $this->unite;
+    }
+
+    public function setUnite(?Unite $unite): static
+    {
+        $this->unite = $unite;
+
+        return $this;
     }
 }
