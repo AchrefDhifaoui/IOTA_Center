@@ -166,9 +166,6 @@
                             <div class="col">
                               {{ form_row(form.formateur) }}
                             </div>
-                            <div class="col">
-                              {{ form_row(form.client) }}
-                            </div>
                         </div>
 
 
@@ -188,19 +185,8 @@
                         </div>
                         <div class="row mb-3 align-items-end">
                             <div class="col">
-
+                                {{ form_row(form.client) }}
                             </div>
-{#                            <div class="col">#}
-{#                                <label class="form-label">Mode</label>#}
-{#                                <div class="form-selectgroup">#}
-{#                                    {% for mode in form.mode %}#}
-{#                                        <label class="form-selectgroup-item">#}
-
-{#                                            <span class="form-selectgroup-label">{{ form_widget(mode) }}  {{ mode.vars.label }}</span>#}
-{#                                        </label>#}
-{#                                    {% endfor %}#}
-{#                                </div>#}
-{#                            </div>#}
                         </div>
 
 

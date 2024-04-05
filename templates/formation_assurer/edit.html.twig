@@ -1,13 +1,59 @@
-{% extends 'base.html.twig' %}
+{% extends 'template.html.twig' %}
 
 {% block title %}Edit FormationAssurer{% endblock %}
 
 {% block body %}
-    <h1>Edit FormationAssurer</h1>
+    <div class="container-xl">
+        <div class="card" style="margin: 17px; height: 75px ">
 
-    {{ include('formation_assurer/_form.html.twig', {'button_label': 'Update'}) }}
+            <div class="row row-cards">
+                <div class="col-12">
+                    <div class="card">
+                        {{ form_start(form) }}
+                        <div class="card-body">
+                            <h3 class="card-title">Edit Formation</h3>
+                            <div class="row row-cards">
+                                <div class="row mb-3 align-items-end">
+                                    <div class="col">
+                                        {{ form_row(form.formation) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.formateur) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.dateDebut) }}
+                                    </div>
+                                </div>
+                                </div>
 
-    <a href="{{ path('app_formation_assurer_index') }}">back to list</a>
+                                <div class="row mb-3 align-items-end">
 
-    {{ include('formation_assurer/_delete_form.html.twig') }}
+                                    <div class="col">
+                                        {{ form_row(form.quantite) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.prixUnitaire) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.unite) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3 align-items-end">
+                                    <div class="col">
+                                        {{ form_row(form.client) }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

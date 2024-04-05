@@ -57,7 +57,7 @@ class FormationAssurerType extends AbstractType
                 'class' => Client::class,
                 'multiple' => true,
                 'attr' => ['class' => 'form-control'],
-                'label' => 'Client',
+
                 'label_attr' => ['class' => 'form-label']
             ])
         ;
