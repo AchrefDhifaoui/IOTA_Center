@@ -81,7 +81,7 @@ class FormationType extends AbstractType
 
             ])
             ->add('domaine', EntityType::class, [
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-select'],
                 'label' => 'domaine',
                 'label_attr' => ['class' => 'form-label'],
                 'class' => Domaine::class,

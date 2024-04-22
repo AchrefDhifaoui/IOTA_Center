@@ -10,6 +10,7 @@ use App\Entity\Unite;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -35,7 +36,7 @@ class FormationAssurerType extends AbstractType
                 'label' => 'quantité',
                 'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('prixUnitaire', null, [
+            ->add('prixUnitaire', NumberType::class, [
                 'attr' => ['class' => 'form-control'],
                 'label' => 'PU',
                 'label_attr' => ['class' => 'form-label'],
@@ -45,20 +46,21 @@ class FormationAssurerType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'label' => 'Formation',
                 'label_attr' => ['class' => 'form-label'],
+                'placeholder' => 'Choisir la formation',
             ])
             ->add('formateur', EntityType::class, [
                 'class' => Formateur::class,
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-select'],
                 'label' => 'Formateur',
                 'label_attr' => ['class' => 'form-label'],
+                'placeholder' => 'Choisir le formateur',
 
             ])
             ->add('client', EntityType::class, [
                 'class' => Client::class,
-                'multiple' => true,
-                'attr' => ['class' => 'form-control'],
-
-                'label_attr' => ['class' => 'form-label']
+                'attr' => ['class' => 'form-select'],
+                'label_attr' => ['class' => 'form-label'],
+                'placeholder' => 'Choisir le client',
             ])
         ;
     }

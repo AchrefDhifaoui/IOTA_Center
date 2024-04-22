@@ -30,17 +30,24 @@ class Client
     #[ORM\Column(length: 25)]
     private ?string $matriculeFiscale = null;
 
-    #[ORM\ManyToMany(targetEntity: FormationAssurer::class, mappedBy: 'client')]
-//    #[ORM\JoinColumn(nullable: false)]
-    private Collection $formationAssurers;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
+    #[ORM\OneToMany(targetEntity: FormationAssurer::class, mappedBy: 'Client')]
+    private Collection $formationAssurers;
 
     public function __construct()
     {
         $this->formationAssurers = new ArrayCollection();
     }
+
+
+
+
+
+
 
     public function getId(): ?int
     {
@@ -107,32 +114,11 @@ class Client
         return $this;
     }
 
-    /**
-     * @return Collection<int, FormationAssurer>
-     */
-    public function getFormationAssurers(): Collection
-    {
-        return $this->formationAssurers;
-    }
 
-    public function addFormationAssurer(FormationAssurer $formationAssurer): static
-    {
-        if (!$this->formationAssurers->contains($formationAssurer)) {
-            $this->formationAssurers->add($formationAssurer);
-            $formationAssurer->addClient($this);
-        }
 
-        return $this;
-    }
 
-    public function removeFormationAssurer(FormationAssurer $formationAssurer): static
-    {
-        if ($this->formationAssurers->removeElement($formationAssurer)) {
-            $formationAssurer->removeClient($this);
-        }
 
-        return $this;
-    }
+
 
     public function getImage(): ?string
     {
@@ -150,5 +136,44 @@ class Client
     {
         return $this->nom;
     }
+
+    /**
+     * @return Collection<int, FormationAssurer>
+     */
+    public function getFormationAssurers(): Collection
+    {
+        return $this->formationAssurers;
+    }
+
+    public function addFormationAssurer(FormationAssurer $formationAssurer): static
+    {
+        if (!$this->formationAssurers->contains($formationAssurer)) {
+            $this->formationAssurers->add($formationAssurer);
+            $formationAssurer->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationAssurer(FormationAssurer $formationAssurer): static
+    {
+        if ($this->formationAssurers->removeElement($formationAssurer)) {
+            // set the owning side to null (unless already changed)
+            if ($formationAssurer->getClient() === $this) {
+                $formationAssurer->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
+
+
+
+
+
 
 }

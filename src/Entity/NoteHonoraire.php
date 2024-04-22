@@ -36,8 +36,9 @@ class NoteHonoraire
     #[ORM\Column(nullable: true)]
     private ?bool $etat = null;
 
-    #[ORM\ManyToOne]
-    private ?TVA $tva = null;
+
+
+
 
     public function __construct()
     {
@@ -139,15 +140,7 @@ class NoteHonoraire
         return $this;
     }
 
-    public function getTva(): ?TVA
-    {
-        return $this->tva;
-    }
 
-    public function setTva(?TVA $tva): static
-    {
-        $this->tva = $tva;
 
-        return $this;
-    }
+
 }

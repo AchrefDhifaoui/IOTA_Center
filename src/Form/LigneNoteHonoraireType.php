@@ -24,7 +24,7 @@ class LigneNoteHonoraireType extends AbstractType
             ->add('designation', EntityType::class, [
                 'class' => FormationAssurer::class,
                 'attr' => ['class' => 'form-control'],
-                'label' => 'Designation',
+
                 'label_attr' => ['class' => 'form-label'],
                 'placeholder' => 'Choose a formation', // Add a placeholder
                 'required' => false,

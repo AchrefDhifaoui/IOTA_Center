@@ -65,14 +65,14 @@ class NoteHonoraireController extends AbstractController
         foreach ($noteHonoraire->getLigneNoteHonoraires() as $ligne) {
             $netTotal += $ligne->getPrixTotalHT();
         }
-        $tva = $noteHonoraire->getTva();
-        if ($tva) {
-            $vatRate = $tva->getTva() / 100;
+        $RS = $noteHonoraire->getRS();
+        if ($RS) {
+            $vatRate = $RS->getTaux() / 100;
             $vatTotal = $netTotal * $vatRate;
         } else {
             $vatTotal = 0;
         }
-        $totalIncludingVAT = $netTotal + $vatTotal;
+        $totalIncludingVAT = $netTotal - $vatTotal;
         $htmlContent = $twig->render('note_honoraire/show.html.twig', [
             'note_honoraire' => $noteHonoraire,
             'netTotal' => $netTotal,

@@ -22,7 +22,7 @@ class FormationAssurer
     #[ORM\Column]
     private ?int $quantite = null;
 
-    #[ORM\Column(name: "prix_unitaire")]
+    #[ORM\Column(name: "prixUnitaire")]
     private ?float $prixUnitaire = null;
 
     #[ORM\ManyToOne(inversedBy: 'formationAssurer')]
@@ -32,16 +32,17 @@ class FormationAssurer
     #[ORM\ManyToOne(inversedBy: 'formationAssurers')]
     private ?Formateur $formateur = null;
 
-    #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'formationAssurers')]
-    private Collection $client;
+
 
     #[ORM\ManyToOne(inversedBy: 'formationAssurers')]
     private ?Unite $unite = null;
 
-    public function __construct()
-    {
-        $this->client = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'formationAssurers')]
+    private ?Client $Client = null;
+
+
+
+
 
     public function getId(): ?int
     {
@@ -110,33 +111,16 @@ class FormationAssurer
         return $this;
     }
 
-    /**
-     * @return Collection<int, Client>
-     */
-    public function getClient(): Collection
-    {
-        return $this->client;
-    }
 
-    public function addClient(Client $client): static
-    {
-        if (!$this->client->contains($client)) {
-            $this->client->add($client);
-        }
 
-        return $this;
-    }
 
-    public function removeClient(Client $client): static
-    {
-        $this->client->removeElement($client);
 
-        return $this;
-    }
+
+
 
     public function __toString(): string
     {
-        return $this->formation->getTitre();
+        return $this->formation->getTitre().'( date )';
     }
 
     public function getUnite(): ?Unite
@@ -150,4 +134,20 @@ class FormationAssurer
 
         return $this;
     }
+
+    public function getClient(): ?Client
+    {
+        return $this->Client;
+    }
+
+    public function setClient(?Client $Client): static
+    {
+        $this->Client = $Client;
+
+        return $this;
+    }
+
+
+
+
 }

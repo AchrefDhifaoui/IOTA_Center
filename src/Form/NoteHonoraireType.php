@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Formateur;
 use App\Entity\NoteHonoraire;
 use App\Entity\ParametreIota;
+use App\Entity\RS;
 use App\Entity\TVA;
 use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -73,12 +74,12 @@ class NoteHonoraireType extends AbstractType
                 'label' => 'Etat',
                 'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
             ])
-        ->add('tva', EntityType::class, [
-                'class' => TVA::class,
-                'attr' => ['class' => 'form-control'],
-                'label' => 'TVA',
-                'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
-            ])
+//        ->add('RS', EntityType::class, [
+//                'class' => RS::class,
+//                'attr' => ['class' => 'form-control'],
+//                'label' => 'RS',
+//                'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
+//            ])
            ;
     }
 

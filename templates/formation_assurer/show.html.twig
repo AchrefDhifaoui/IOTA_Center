@@ -21,20 +21,17 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#"  data-bs-toggle="modal" data-bs-target="#modal-show">
-                        <div class="datagrid-item">
-                            <div class="datagrid-title">Clients list</div>
-                            <div class="datagrid-content">
-                                <div class="avatar-list avatar-list-stacked">
-                                    <span class="avatar avatar-xs rounded" style="background-image: url({{ asset('assets/static/avatars/inconnu.png') }})"></span>
-                                    <span class="avatar avatar-xs rounded" style="background-image: url({{ asset('assets/static/avatars/inconnu.png') }})"></span>
-                                    <span class="avatar avatar-xs rounded" style="background-image: url({{ asset('assets/static/avatars/inconnu.png') }})"></span>
-                                    <span class="avatar avatar-xs rounded" style="background-image: url({{ asset('assets/static/avatars/inconnu.png') }})"></span>
 
+                        <div class="datagrid-item">
+                            <div class="datagrid-title">Client</div>
+                            <div class="datagrid-content">
+                                <div class="d-flex align-items-center">
+                                    <span class="avatar avatar-xs me-2 rounded" style="background-image: url({{ asset('uploads/client-image/') }}{{ formation_assurer.client.image }})"></span>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal-show" class="dropdown-item">{{ formation_assurer.client.nom }} </a>
                                 </div>
                             </div>
                         </div>
-                        </a>
+
                         <div class="datagrid-item">
                             <div class="datagrid-title">Status</div>
                             <div class="datagrid-content">
@@ -135,21 +132,27 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Clients</h5>
+                    <h5 class="modal-title">Client</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row row-cards">
 
-                            {% for client in formation_assurer.client %}
-                        <div class="col-md-6 col-lg-6">
-                            <div class="card">
-
-                                <div class="card-body p-4 text-center">
-                                    <span class="avatar avatar-xl mb-3 rounded" style="background-image: url({{ asset('uploads/client-image/') }}{{ client.image }})"></span>
-                                    <h3 class="m-0 mb-1">{{client.nom}}  </h3>
-                                    <div class="text-muted"><span class="badge bg-purple-lt">{{ client.matriculeFiscale }}</span></div>
+                    <div class="card" style="border: none">
+                        <div class="row">
+                            <div class="col-5">
+                                <!-- Photo -->
+                                <img src="{{ asset('uploads/client-image/') }}{{ formation_assurer.client.image }}" class="w-100 h-100 object-cover card-img-start"/>
+                            </div>
+                            <div class="col-7" >
+                                <div class="card-body" >
+                                    <h3 class="card-title">{{ formation_assurer.client.nom }}</h3>
+                                    <p class="text-muted"> <strong>Email : </strong> {{ formation_assurer.client.email }}</p>
+                                    <p class="text-muted"> <strong>Tel : </strong> {{ formation_assurer.client.telephone }}</p>
+                                    <p class="text-muted"> <strong>Adresse : </strong> {{ formation_assurer.client.adresse }}</p>
+                                    <p class="text-muted"> <strong>MF : </strong>  {{ formation_assurer.client.matriculeFiscale }}</p>
                                 </div>
+                            </div>
+                            <div class="card-footer">
                                 <div class="d-flex">
                                     <a href="#" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/mail -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" /><path d="M3 7l9 6l9 -6" /></svg>
@@ -159,14 +162,15 @@
                                         Call</a>
                                 </div>
                             </div>
-                        </div>
-                            {% endfor %}
 
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
 {#    <h1>FormationAssurer</h1>#}
 
 {#    <table class="table">#}
