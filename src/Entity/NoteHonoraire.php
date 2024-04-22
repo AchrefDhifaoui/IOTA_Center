@@ -11,6 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: NoteHonoraireRepository::class)]
 class NoteHonoraire
 {
+    const ETAT_NON_PAYE = 'Non payé';
+    const ETAT_PAYE = 'payé';
+    const ETAT_PARTIELLEMENT_PAYE = 'partiellement payé';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,8 +36,8 @@ class NoteHonoraire
     #[ORM\JoinColumn(nullable: false)]
     private ?Formateur $formateur = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $etat = null;
+    #[ORM\Column]
+    private ?string $etat = self::ETAT_NON_PAYE;
 
 
 
@@ -128,12 +131,12 @@ class NoteHonoraire
         return $this;
     }
 
-    public function isEtat(): ?bool
+    public function getEtat(): ?string
     {
         return $this->etat;
     }
 
-    public function setEtat(?bool $etat): static
+    public function setEtat(?string $etat): static
     {
         $this->etat = $etat;
 
