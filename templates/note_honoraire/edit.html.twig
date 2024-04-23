@@ -18,11 +18,11 @@
                                         {{ form_row(form.formateur) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="mb-3">
-                                        {{ form_row(form.client) }}
-                                    </div>
-                                </div>
+{#                                <div class="col-sm-6 col-md-3">#}
+{#                                    <div class="mb-3">#}
+{#                                        {{ form_row(form.client) }}#}
+{#                                    </div>#}
+{#                                </div>#}
                                 <div class="col-sm-6 col-md-2">
                                     <div class="mb-3">
                                         {{ form_row(form.date) }}
@@ -33,16 +33,16 @@
                                         {{ form_row(form.numero) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-1">
-                                    <div class="mb-1">
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-2">
                                         {{ form_row(form.etat) }}
                                     </div>
                                 </div>
-{#                                <div class="col-sm-6 col-md-1">#}
-{#                                    <div class="mb-1">#}
-{#                                        {{ form_row(form.RS) }}#}
-{#                                    </div>#}
-{#                                </div>#}
+                                <div class="col-sm-6 col-md-2">
+                                    <div class="mb-2">
+                                        {{ form_row(form.RS) }}
+                                    </div>
+                                </div>
 
 
                                 {% for ligne in form.ligneNoteHonoraires %}
@@ -120,6 +120,65 @@
 
 
                         </script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                function updatePrixUnitaireAndQuantite(element) {
+                                    var ligneContainer = element.closest('.row');
+                                    var selectedFormationId = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_designation"]').value;
+                                    var prixUnitaireField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixUnitaire"]');
+                                    var quantiteField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_qantite"]');
+                                    if (!prixUnitaireField || !quantiteField) {
+                                        return;
+                                    }
+                                    // Make an AJAX request to fetch prixUnitaire and quantite for the selected FormationAssurer
+                                    var url = '{{ path('fetch_formation_assurer_details', {'id': '__id__'}) }}';
+                                    url = url.replace('__id__', selectedFormationId);
+
+                                    fetch(url)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Update quantite and prixUnitaire fields with fetched values
+                                            quantiteField.value = data.quantite;
+                                            prixUnitaireField.value = data.prixUnitaire;
+
+                                            // Calculate and update prixTotalHT
+                                            updatePrixTotalHT(ligneContainer);
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                }
+
+                                function handleSelectChange(event) {
+                                    var target = event.target;
+                                    if (target.id.includes('_designation')) {
+                                        updatePrixUnitaireAndQuantite(target);
+                                    }
+                                }
+
+                                function updatePrixTotalHT(ligneContainer) {
+                                    var prixUnitaireField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixUnitaire"]');
+                                    var quantiteField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_qantite"]');
+                                    var prixTotalHTField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixTotalHT"]');
+                                    if (!prixUnitaireField || !quantiteField || !prixTotalHTField) {
+                                        return;
+                                    }
+                                    var prixUnitaire = parseFloat(prixUnitaireField.value);
+                                    var quantite = parseInt(quantiteField.value);
+                                    var prixTotalHT = prixUnitaire * quantite;
+                                    prixTotalHTField.value = prixTotalHT.toFixed(2);
+                                }
+
+                                function handleInput(event) {
+                                    var target = event.target;
+                                    if (target.id.includes('_prixUnitaire') || target.id.includes('_qantite')) {
+                                        updatePrixTotalHT(target.closest('.row'));
+                                    }
+                                }
+
+                                document.addEventListener('change', handleSelectChange);
+                                document.addEventListener('input', handleInput);
+                            });
+                        </script>
+
 
                         {{ form_end(form) }}
                     </div>
