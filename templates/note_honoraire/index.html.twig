@@ -68,10 +68,13 @@
 
                         </td>
                         <td>
-                            {% if NoteHonoraire.etat==true %}
-                            <span class="badge bg-success me-1"></span> Paid
+
+                            {% if NoteHonoraire.etat=="Non payé" %}
+                                <span class="badge bg-warning me-1"></span> Non payé
+                            {% elseif NoteHonoraire.etat=="payé" %}
+                                <span class="badge bg-success me-1"></span> payé
                             {% else %}
-                                <span class="badge bg-warning me-1"></span> Not payed
+                                <span class="badge bg-success me-1"></span> partiellement payé
                             {% endif %}
                         </td>
 
@@ -159,21 +162,21 @@
                         <div class="col">
                             {{ form_row(form.formateur) }}
                         </div>
-                        <div class="col">
-                            {{ form_row(form.client) }}
-                        </div>
+{#                        <div class="col">#}
+{#                            {{ form_row(form.client) }}#}
+{#                        </div>#}
                         <div class="col">
                             {{ form_row(form.numero) }}
                         </div>
                         <div class="col">
                             {{ form_row(form.date) }}
                         </div>
-                        <div class="col">
-                            {{ form_row(form.etat) }}
-                        </div>
 {#                        <div class="col">#}
-{#                            {{ form_row(form.RS) }}#}
+{#                            {{ form_row(form.etat) }}#}
 {#                        </div>#}
+                        <div class="col">
+                            {{ form_row(form.RS) }}
+                        </div>
 
                     </div>
                     <div class="tags"

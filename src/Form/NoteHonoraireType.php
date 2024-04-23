@@ -44,13 +44,6 @@ class NoteHonoraireType extends AbstractType
                 'label' => 'date',
                 'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('client', EntityType::class, [
-                'class' => ParametreIota::class,
-                'choice_label' => 'nom',
-                'attr' => ['class' => 'form-control'],
-                'label' => 'Client',
-                'label_attr' => ['class' => 'form-label'],
-            ])
             ->add('formateur', EntityType::class, [
                 'class' => Formateur::class,
                 'attr' => ['class' => 'form-control'],
@@ -65,15 +58,34 @@ class NoteHonoraireType extends AbstractType
                 'by_reference' => false,
                 'allow_delete' => true,
             ])
-            ->add('etat', ChoiceType::class, [
-                'choices' => [
-                    'Paid' => true,
-                    'Not Paid' => false,
-                ],
-                'attr' => ['class' => 'form-control'],
+            ->add('RS', EntityType::class, [
+                'class' => RS::class,
+                'attr' => ['class' => 'form-select'],
+                'label' => 'RS',
+                'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
+           ]);
+        if (!$options['exclude_etat_field']) {
+            $builder->add('etat', ChoiceType::class, [
+               'choices' => [
+                   'Non payé' => NoteHonoraire::ETAT_NON_PAYE,
+                   'Payé' => NoteHonoraire::ETAT_PAYE,
+                   'Partiellement payé' => NoteHonoraire::ETAT_PARTIELLEMENT_PAYE,
+               ],
+               'attr' => ['class' => 'form-select'],
                 'label' => 'Etat',
                 'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
-            ])
+           ]);
+        }
+//            ->add('etat', ChoiceType::class, [
+//                'choices' => [
+//                    'Non payé' => NoteHonoraire::ETAT_NON_PAYE,
+//                    'Payé' => NoteHonoraire::ETAT_PAYE,
+//                    'Partiellement payé' => NoteHonoraire::ETAT_PARTIELLEMENT_PAYE,
+//                ],
+//                'attr' => ['class' => 'form-control'],
+//                'label' => 'Etat',
+//                'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
+//            ])
 //        ->add('RS', EntityType::class, [
 //                'class' => RS::class,
 //                'attr' => ['class' => 'form-control'],
@@ -87,7 +99,9 @@ class NoteHonoraireType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => NoteHonoraire::class,
+            'exclude_etat_field' => false,
         ]);
+        $resolver->setAllowedTypes('exclude_etat_field', 'bool');
     }
     private function generateDefaultNumero(): string
     {

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\LigneNoteHonoraire;
 use App\Entity\NoteHonoraire;
+use App\Entity\ParametreIota;
 use App\Form\NoteHonoraireType;
 use App\Repository\NoteHonoraireRepository;
 use App\Service\pdfService;
@@ -23,7 +24,12 @@ class NoteHonoraireController extends AbstractController
     public function index(NoteHonoraireRepository $noteHonoraireRepository,Request $request, EntityManagerInterface $entityManager): Response
     {
         $noteHonoraire = new NoteHonoraire();
-        $form = $this->createForm(NoteHonoraireType::class, $noteHonoraire);
+        $noteHonoraire->setEtat(NoteHonoraire::ETAT_NON_PAYE);
+        $iota=$entityManager->getRepository(ParametreIota::class)->find(1);
+        $noteHonoraire->setClient($iota);
+        $form = $this->createForm(NoteHonoraireType::class, $noteHonoraire, [
+            'exclude_etat_field' => true,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -61,6 +67,7 @@ class NoteHonoraireController extends AbstractController
     #[Route('/pdf/{id}', name: 'app_note_honoraire_print', methods: ['GET'])]
     public function show(NoteHonoraire $noteHonoraire,PdfService $pdf, Environment $twig): Response
     {
+
         $netTotal = 0;
         foreach ($noteHonoraire->getLigneNoteHonoraires() as $ligne) {
             $netTotal += $ligne->getPrixTotalHT();
