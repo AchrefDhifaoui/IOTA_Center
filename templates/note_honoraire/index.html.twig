@@ -68,10 +68,13 @@
 
                         </td>
                         <td>
+
                             {% if NoteHonoraire.etat=="Non payé" %}
-                            <span class="badge bg-success me-1"></span> Non payé
+                                <span class="badge bg-warning me-1"></span> Non payé
+                            {% elseif NoteHonoraire.etat=="payé" %}
+                                <span class="badge bg-success me-1"></span> payé
                             {% else %}
-                                <span class="badge bg-warning me-1"></span> payé
+                                <span class="badge bg-success me-1"></span> partiellement payé
                             {% endif %}
                         </td>
 
@@ -171,9 +174,9 @@
 {#                        <div class="col">#}
 {#                            {{ form_row(form.etat) }}#}
 {#                        </div>#}
-{#                        <div class="col">#}
-{#                            {{ form_row(form.RS) }}#}
-{#                        </div>#}
+                        <div class="col">
+                            {{ form_row(form.RS) }}
+                        </div>
 
                     </div>
                     <div class="tags"

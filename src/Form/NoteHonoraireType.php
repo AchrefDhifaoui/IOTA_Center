@@ -57,7 +57,13 @@ class NoteHonoraireType extends AbstractType
                 'allow_add'=>true,
                 'by_reference' => false,
                 'allow_delete' => true,
-            ]);
+            ])
+            ->add('RS', EntityType::class, [
+                'class' => RS::class,
+                'attr' => ['class' => 'form-select'],
+                'label' => 'RS',
+                'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
+           ]);
         if (!$options['exclude_etat_field']) {
             $builder->add('etat', ChoiceType::class, [
                'choices' => [

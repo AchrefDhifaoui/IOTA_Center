@@ -120,8 +120,11 @@ class FormationAssurer
 
     public function __toString(): string
     {
-        return $this->formation->getTitre().'( date )';
+        $dateString = $this->dateDebut ? $this->dateDebut->format('Y-m-d') : 'No Date';
+
+        return $this->formation->getTitre() . ' (' . $dateString . ')';
     }
+
 
     public function getUnite(): ?Unite
     {

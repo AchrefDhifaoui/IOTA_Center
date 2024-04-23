@@ -39,6 +39,9 @@ class NoteHonoraire
     #[ORM\Column]
     private ?string $etat = self::ETAT_NON_PAYE;
 
+    #[ORM\ManyToOne]
+    private ?RS $RS = null;
+
 
 
 
@@ -139,6 +142,18 @@ class NoteHonoraire
     public function setEtat(?string $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getRS(): ?RS
+    {
+        return $this->RS;
+    }
+
+    public function setRS(?RS $RS): static
+    {
+        $this->RS = $RS;
 
         return $this;
     }
