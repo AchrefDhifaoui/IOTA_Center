@@ -38,7 +38,7 @@ class Facture
     #[ORM\Column(length: 255)]
     private ?string $etat = self::ETAT_NON_PAYE;
 
-    #[ORM\OneToMany(targetEntity: LigneFacture::class, mappedBy: 'Facture')]
+    #[ORM\OneToMany(targetEntity: LigneFacture::class, mappedBy: 'Facture', cascade: ['persist','remove'])]
     private Collection $ligneFactures;
 
     public function __construct()

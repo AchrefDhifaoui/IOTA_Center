@@ -128,7 +128,7 @@ class NoteHonoraireController extends AbstractController
     }
 
     #[Route('delete/{id}', name: 'app_note_honoraire_delete')]
-    public function delete(Request $request, NoteHonoraire $noteHonoraire=null, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
+    public function delete(NoteHonoraire $noteHonoraire=null,ManagerRegistry $doctrine): Response
     {
         $manager = $doctrine->getManager();
         $manager->remove($noteHonoraire);

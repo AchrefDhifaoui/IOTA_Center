@@ -8,6 +8,7 @@ use App\Entity\LigneFacture;
 use App\Entity\Unite;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,21 +17,39 @@ class LigneFactureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('quantite')
-            ->add('prixUnitaire')
-            ->add('totalHT')
             ->add('designation', EntityType::class, [
                 'class' => FormationAssurer::class,
-'choice_label' => 'id',
+                'attr' => ['class' => 'form-control'],
+
+                'label_attr' => ['class' => 'form-label'],
+                'placeholder' => 'Choose a formation', // Add a placeholder
+                'required' => false,
+
+            ])
+            ->add('quantite', null, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'quantité',
+                'label_attr' => ['class' => 'form-label'],
+            ])
+            ->add('prixUnitaire', null, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'PU',
+                'label_attr' => ['class' => 'form-label'],
             ])
             ->add('Unite', EntityType::class, [
                 'class' => Unite::class,
-'choice_label' => 'id',
+                'choice_label' => 'titre',
+                'attr' => ['class' => 'form-control'],
+                'label' => 'Unite',
+                'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('Facture', EntityType::class, [
-                'class' => Facture::class,
-'choice_label' => 'id',
+            ->add('totalHT', NumberType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'PTHT',
+                'label_attr' => ['class' => 'form-label'],
             ])
+
+
         ;
     }
 
