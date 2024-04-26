@@ -13,7 +13,7 @@ class LigneFacture
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist'])]
     private ?FormationAssurer $designation = null;
 
     #[ORM\Column]
@@ -28,7 +28,7 @@ class LigneFacture
     #[ORM\Column]
     private ?float $totalHT = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ligneFactures')]
+    #[ORM\ManyToOne(inversedBy: 'ligneFactures', cascade: ['remove'])]
     private ?Facture $Facture = null;
 
     public function getId(): ?int

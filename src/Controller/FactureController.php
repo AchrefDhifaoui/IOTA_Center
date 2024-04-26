@@ -5,12 +5,16 @@ namespace App\Controller;
 use App\Entity\Facture;
 use App\Form\FactureType;
 use App\Repository\FactureRepository;
+use App\Repository\ParametreIotaRepository;
+use App\Service\pdfService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Environment;
 
 #[Route('/facture')]
 class FactureController extends AbstractController
@@ -57,20 +61,69 @@ class FactureController extends AbstractController
 //    }
 
     #[Route('pdf/{id}', name: 'app_facture_show', methods: ['GET'])]
-    public function show(Facture $facture): Response
+    public function show(ParametreIotaRepository $iotaRepository,Facture $facture,PdfService $pdf, Environment $twig): Response
     {
-        return $this->render('facture/show.html.twig', [
+
+        $netTotal = 0;
+        foreach ($facture->getLigneFactures() as $ligne) {
+            $netTotal += $ligne->getTotalHT();
+        }
+        $RS = $facture->getRS();
+        $tva = $facture->getTva();
+        if ($RS) {
+            $tauxRS = $RS->getTaux() / 100;
+            $totalRS = $netTotal * $tauxRS;
+        } else {
+            $totalRS = 0;
+        }
+        if ($tva){
+            $tauxTVA = $tva->getTva() /100;
+            $totalTVA = $netTotal * $tauxTVA;
+        }else {
+            $totalTVA = 0;
+
+        }
+        $totalTTC=$netTotal + $totalTVA;
+
+        $htmlContent = $twig->render('facture/show.html.twig', [
             'facture' => $facture,
+            'iota'=>$iotaRepository->find(1),
+            'netTotal'=>$netTotal,
+            'totalTTC'=>$totalTTC,
+            'totalRS'=>$totalRS,
+            'totalTVA'=>$totalTVA
         ]);
+
+        $pdfContent = $pdf->generateBinaryPDF($htmlContent);
+
+        // Create a Response object with the PDF content
+        $response = new Response($pdfContent);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="facture.pdf"');
+
+        return $response;
+
     }
+
 
     #[Route('/{id}/edit', name: 'app_facture_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Facture $facture, EntityManagerInterface $entityManager): Response
     {
+        $originalTags = new ArrayCollection();
+        foreach ($facture->getLigneFactures() as $ligne) {
+            $originalTags->add($ligne);
+        }
+
         $form = $this->createForm(FactureType::class, $facture);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($originalTags as $ligne) {
+                if (false === $facture->getLigneFactures()->contains($ligne)) {
+                    $entityManager->remove($ligne);
+                }
+            }
+            $entityManager->persist($facture);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
