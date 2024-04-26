@@ -28,6 +28,9 @@ class LigneFacture
     #[ORM\Column]
     private ?float $totalHT = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ligneFactures')]
+    private ?Facture $Facture = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class LigneFacture
     public function setTotalHT(float $totalHT): static
     {
         $this->totalHT = $totalHT;
+
+        return $this;
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->Facture;
+    }
+
+    public function setFacture(?Facture $Facture): static
+    {
+        $this->Facture = $Facture;
 
         return $this;
     }

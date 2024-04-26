@@ -3,12 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\FactureRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FactureRepository::class)]
 class Facture
 {
+    const ETAT_NON_PAYE = 'Non payé';
+    const ETAT_PAYE = 'payé';
+    const ETAT_PARTIELLEMENT_PAYE = 'partiellement payé';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -23,6 +28,23 @@ class Facture
     #[ORM\ManyToOne(inversedBy: 'factures')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
+
+    #[ORM\ManyToOne]
+    private ?TVA $tva = null;
+
+    #[ORM\ManyToOne]
+    private ?RS $RS = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $etat = self::ETAT_NON_PAYE;
+
+    #[ORM\OneToMany(targetEntity: LigneFacture::class, mappedBy: 'Facture')]
+    private Collection $ligneFactures;
+
+    public function __construct()
+    {
+        $this->ligneFactures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,6 +83,72 @@ class Facture
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getTva(): ?TVA
+    {
+        return $this->tva;
+    }
+
+    public function setTva(?TVA $tva): static
+    {
+        $this->tva = $tva;
+
+        return $this;
+    }
+
+    public function getRS(): ?RS
+    {
+        return $this->RS;
+    }
+
+    public function setRS(?RS $RS): static
+    {
+        $this->RS = $RS;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LigneFacture>
+     */
+    public function getLigneFactures(): Collection
+    {
+        return $this->ligneFactures;
+    }
+
+    public function addLigneFacture(LigneFacture $ligneFacture): static
+    {
+        if (!$this->ligneFactures->contains($ligneFacture)) {
+            $this->ligneFactures->add($ligneFacture);
+            $ligneFacture->setFacture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneFacture(LigneFacture $ligneFacture): static
+    {
+        if ($this->ligneFactures->removeElement($ligneFacture)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneFacture->getFacture() === $this) {
+                $ligneFacture->setFacture(null);
+            }
+        }
 
         return $this;
     }

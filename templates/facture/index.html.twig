@@ -11,6 +11,7 @@
                 <th>Id</th>
                 <th>Numero</th>
                 <th>Date_facture</th>
+                <th>Etat</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -20,6 +21,7 @@
                 <td>{{ facture.id }}</td>
                 <td>{{ facture.numero }}</td>
                 <td>{{ facture.dateFacture ? facture.dateFacture|date('Y-m-d') : '' }}</td>
+                <td>{{ facture.etat }}</td>
                 <td>
                     <a href="{{ path('app_facture_show', {'id': facture.id}) }}">show</a>
                     <a href="{{ path('app_facture_edit', {'id': facture.id}) }}">edit</a>
@@ -27,7 +29,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="5">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

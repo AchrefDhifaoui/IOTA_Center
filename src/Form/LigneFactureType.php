@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Facture;
 use App\Entity\FormationAssurer;
 use App\Entity\LigneFacture;
 use App\Entity\Unite;
@@ -24,6 +25,10 @@ class LigneFactureType extends AbstractType
             ])
             ->add('Unite', EntityType::class, [
                 'class' => Unite::class,
+'choice_label' => 'id',
+            ])
+            ->add('Facture', EntityType::class, [
+                'class' => Facture::class,
 'choice_label' => 'id',
             ])
         ;
