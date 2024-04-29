@@ -49,9 +49,14 @@
                                     <div class="container-xl" >
                                         <div class="card" id="ligne" style="margin: 15px;padding: 15px">
                                             <div class="row row-cards">
-                                                <div class="col-sm-5 col-md-3">
+                                                <div class="col-sm-5 col-md-2">
                                                     <div class="mb-2">
                                                         {{ form_row(ligne.designation) }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-5 col-md-2">
+                                                    <div class="mb-2">
+                                                        {{ form_row(ligne.desManuel) }}
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-5 col-md-2">
@@ -69,7 +74,7 @@
                                                         {{ form_row(ligne.Unite) }}
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-5 col-md-3">
+                                                <div class="col-sm-5 col-md-2">
                                                     <div class="mb-2">
                                                         {{ form_row(ligne.totalHT) }}
                                                     </div>

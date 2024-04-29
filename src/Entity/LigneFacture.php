@@ -31,6 +31,9 @@ class LigneFacture
     #[ORM\ManyToOne(inversedBy: 'ligneFactures', cascade: ['remove'])]
     private ?Facture $Facture = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $des_Manuel = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +107,18 @@ class LigneFacture
     public function setFacture(?Facture $Facture): static
     {
         $this->Facture = $Facture;
+
+        return $this;
+    }
+
+    public function getDesManuel(): ?string
+    {
+        return $this->des_Manuel;
+    }
+
+    public function setDesManuel(?string $des_Manuel): static
+    {
+        $this->des_Manuel = $des_Manuel;
 
         return $this;
     }

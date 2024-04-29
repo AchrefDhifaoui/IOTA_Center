@@ -6,9 +6,12 @@ use App\Entity\Facture;
 use App\Entity\FormationAssurer;
 use App\Entity\LigneFacture;
 use App\Entity\Unite;
+use Doctrine\DBAL\Types\StringType;
+
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -26,6 +29,16 @@ class LigneFactureType extends AbstractType
                 'required' => false,
 
             ])
+            ->add('desManuel',TextType::class,[
+
+                    'attr' => ['class' => 'form-control'],
+                    'label'=>'designation Manuel',
+                    'label_attr' => ['class' => 'form-label'],
+
+
+
+                ]
+            )
             ->add('quantite', null, [
                 'attr' => ['class' => 'form-control'],
                 'label' => 'quantité',

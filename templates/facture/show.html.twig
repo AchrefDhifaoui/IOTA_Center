@@ -809,8 +809,14 @@
                 {% for ligne in facture.ligneFactures  %}
                     <tr>
                         <td class="border-b py-3 pl-3">{{ loop.index }}</td>
-                        <td class="border-b py-3 pl-2">{{ ligne.designation }}</td>
-                        <td class="border-b py-3 pl-2 text-right">{{ ligne.quantite }}</td>
+                        {% if ligne.designation!=null %}
+                           <td class="border-b py-3 pl-2">{{ ligne.designation }}</td>
+                        {% else %}
+                            <td class="border-b py-3 pl-2">{{ ligne.desManuel }}</td>
+                            {% endif %}
+
+
+                            <td class="border-b py-3 pl-2 text-right">{{ ligne.quantite }}</td>
                         <td class="border-b py-3 pl-2 text-center">{{ ligne.unite.titre }}</td>
                         <td class="border-b py-3 pl-2 text-center">{{ ligne.prixUnitaire }}</td>
                         <td class="border-b py-3 pl-2 text-right">{{ ligne.TotalHT }}</td>
