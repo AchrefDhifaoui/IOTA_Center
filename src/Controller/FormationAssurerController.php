@@ -28,7 +28,6 @@ class FormationAssurerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($formationAssurer);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_formation_assurer_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('formation_assurer/index.html.twig', [

@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
@@ -837,7 +838,7 @@
                                                 <div class="whitespace-nowrap text-slate-400"> total HT :</div>
                                             </td>
                                             <td class="border-b p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-main">{{ netTotal }}</div>
+                                                <div class="whitespace-nowrap font-bold text-main">{{ facture.totalHT }}</div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -845,7 +846,7 @@
                                                 <div class="whitespace-nowrap text-slate-400">total TVA :</div>
                                             </td>
                                             <td class="p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-main">{{ totalTVA }}</div>
+                                                <div class="whitespace-nowrap font-bold text-main">{{ facture.totalTVA }}</div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -853,15 +854,15 @@
                                                 <div class="whitespace-nowrap font-bold text-white">Total TTC:</div>
                                             </td>
                                             <td class="bg-main p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-white">{{ totalTTC }}</div>
+                                                <div class="whitespace-nowrap font-bold text-white">{{ facture.totalTTC }}</div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="bg-main p-3">
-                                                <div class="whitespace-nowrap font-bold text-white">Total RS:</div>
+                                                <div class="whitespace-nowrap font-bold text-white">Timbre</div>
                                             </td>
                                             <td class="bg-main p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-white">{{ totalRS }}</div>
+                                                <div class="whitespace-nowrap font-bold text-white">{{ facture.timbre }}</div>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -874,6 +875,9 @@
                 </tr>
                 </tbody>
             </table>
+            <h2>{{ lettreEnFr }}</h2>
+{#            <h2>{{ lettreEnAr }}</h2>#}
+
         </div>
 
     </div>

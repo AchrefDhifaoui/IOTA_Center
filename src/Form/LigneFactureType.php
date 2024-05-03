@@ -30,7 +30,7 @@ class LigneFactureType extends AbstractType
 
             ])
             ->add('desManuel',TextType::class,[
-
+'data'=>'--',
                     'attr' => ['class' => 'form-control'],
                     'label'=>'designation Manuel',
                     'label_attr' => ['class' => 'form-label'],

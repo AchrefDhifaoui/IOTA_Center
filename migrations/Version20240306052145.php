@@ -24,7 +24,8 @@ final class Version20240306052145 extends AbstractMigration
         $this->addSql('CREATE TABLE formation_assurer_client (formation_assurer_id INT NOT NULL, client_id INT NOT NULL, INDEX IDX_6584E1E13FA8622C (formation_assurer_id), INDEX IDX_6584E1E119EB6921 (client_id), PRIMARY KEY(formation_assurer_id, client_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE formateur_domaine ADD CONSTRAINT FK_4D327D34155D8F51 FOREIGN KEY (formateur_id) REFERENCES formateur (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE formateur_domaine ADD CONSTRAINT FK_4D327D344272FC9F FOREIGN KEY (domaine_id) REFERENCES domaine (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE formation_assurer_client ADD CONSTRAINT FK_6584E1E13FA8622C FOREIGN KEY (formation_assurer_id) REFERENCES formation_assurer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE formation_assurer_client 
+ADD CONSTRAINT FK_6584E1E13FA8622C FOREIGN KEY (formation_assurer_id) REFERENCES formation_assurer (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE formation_assurer_client ADD CONSTRAINT FK_6584E1E119EB6921 FOREIGN KEY (client_id) REFERENCES client (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE formation_assurer ADD formateur_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE formation_assurer ADD CONSTRAINT FK_6B835B46155D8F51 FOREIGN KEY (formateur_id) REFERENCES formateur (id)');

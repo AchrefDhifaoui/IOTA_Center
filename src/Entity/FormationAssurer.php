@@ -22,8 +22,6 @@ class FormationAssurer
     #[ORM\Column]
     private ?int $quantite = null;
 
-    #[ORM\Column(name: "prixUnitaire")]
-    private ?float $prixUnitaire = null;
 
     #[ORM\ManyToOne(inversedBy: 'formationAssurer')]
     #[ORM\JoinColumn(nullable: false)]
@@ -39,6 +37,9 @@ class FormationAssurer
 
     #[ORM\ManyToOne(inversedBy: 'formationAssurers')]
     private ?Client $Client = null;
+
+    #[ORM\Column]
+    private ?float $puFormation = null;
 
 
 
@@ -75,17 +76,6 @@ class FormationAssurer
         return $this;
     }
 
-    public function getPrixUnitaire(): ?float
-    {
-        return $this->prixUnitaire;
-    }
-
-    public function setPrixUnitaire(float $prixUnitaire): static
-    {
-        $this->$prixUnitaire = $prixUnitaire;
-
-        return $this;
-    }
 
     public function getFormation(): ?Formation
     {
@@ -146,6 +136,18 @@ class FormationAssurer
     public function setClient(?Client $Client): static
     {
         $this->Client = $Client;
+
+        return $this;
+    }
+
+    public function getPuFormation(): ?float
+    {
+        return $this->puFormation;
+    }
+
+    public function setPuFormation(float $puFormation): static
+    {
+        $this->puFormation = $puFormation;
 
         return $this;
     }

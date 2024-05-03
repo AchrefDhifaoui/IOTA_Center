@@ -12,6 +12,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,6 +32,12 @@ class FactureType extends AbstractType
                 'data' => $this->generateDefaultNumero(),
                 'attr' => ['class' => 'form-control'],
                 'label' => 'numero',
+                'label_attr' => ['class' => 'form-label'],
+            ])
+            ->add('commentaire', TextType::class, [
+                'data' => "--",
+                'attr' => ['class' => 'form-control'],
+                'label' => 'Commentaire',
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('date_facture', DateType::class, [
@@ -51,10 +59,9 @@ class FactureType extends AbstractType
                 'label_attr' => ['class' => 'form-label'],
 
             ])
-            ->add('RS', EntityType::class, [
-                'class' => RS::class,
-                'attr' => ['class' => 'form-select'],
-                'label' => 'RS',
+            ->add('timbre',NumberType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'timbre',
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('ligneFactures',CollectionType::class,[
@@ -63,6 +70,21 @@ class FactureType extends AbstractType
                 'allow_add'=>true,
                 'by_reference' => false,
                 'allow_delete' => true,
+            ])
+            ->add('Total_HT',NumberType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'Total_HT',
+                'label_attr' => ['class' => 'form-label'],
+            ])
+            ->add('Total_TVA',NumberType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'Total_TVA',
+                'label_attr' => ['class' => 'form-label'],
+            ])
+            ->add('Total_TTC',NumberType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label' => 'Total_TTC',
+                'label_attr' => ['class' => 'form-label'],
             ])
         ;
         if (!$options['exclude_etat_field']) {
