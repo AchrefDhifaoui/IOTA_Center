@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\Client;
 use App\Entity\Facture;
 use App\Entity\RS;
+use App\Entity\Timbre;
 use App\Entity\TVA;
+use App\Repository\TimbreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -57,9 +59,12 @@ class FactureType extends AbstractType
                 'attr' => ['class' => 'form-select'],
                 'label' => 'TVA',
                 'label_attr' => ['class' => 'form-label'],
+                'placeholder'=>'choisir taux de TVA'
 
             ])
-            ->add('timbre',NumberType::class, [
+            ->add('timbre',EntityType::class, [
+                'class'=>Timbre::class,
+
                 'attr' => ['class' => 'form-control'],
                 'label' => 'timbre',
                 'label_attr' => ['class' => 'form-label'],

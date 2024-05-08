@@ -36,14 +36,14 @@
                     <thead>
                     <tr>
 
-                        <th class="w-1">No. <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
-                        </th>
+
                         <th>Titre</th>
                         <th>Formateur</th>
+                        <th>Client</th>
                         <th>date debut</th>
                         <th>quantite</th>
                         <th>Prix Unitaire</th>
-                        <th>status</th>
+
                         <th></th>
                     </tr>
                     </thead>
@@ -51,7 +51,7 @@
                     {% for formation in formation_assurers %}
                         <tr>
 
-                            <td><span class="text-muted">{{ formation.id }}</span></td>
+
                             <td>
                                 <div class="d-flex py-1 align-items-center">
                                     <div class="flex-fill">
@@ -63,6 +63,9 @@
                             <td>
                                 {{ formation.formateur.nom }}   {{ formation.formateur.prenom }}
                             </td>
+                            <td>
+                                {{ formation.client.nom }}
+                            </td>
 
 
                             <td>
@@ -73,9 +76,6 @@
                             <td>{{ formation.quantite }}</td>
                             <td>{{ formation.puFormation }}</td>
 
-                            <td>
-                                status
-                            </td>
 
                             <td class="text-end">
                                 <a href="{{path('app_formation_assurer_show',{'id':formation.id})}}">

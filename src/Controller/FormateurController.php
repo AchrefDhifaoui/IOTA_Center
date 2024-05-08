@@ -147,6 +147,15 @@ class FormateurController extends AbstractController
     #[Route('/delete/{id}', name: 'app_formateur_delete')]
     public function delete(Request $request, Formateur $formateur=null, EntityManagerInterface $entityManager ,ManagerRegistry $doctrine): Response
     {
+        $nomFichierJoint = $formateur->getImage();
+
+        // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
+        if ($nomFichierJoint) {
+            $cheminFichierJoint = $this->getParameter('formateur_directory').'/'.$nomFichierJoint;
+            if (file_exists($cheminFichierJoint)) {
+                unlink($cheminFichierJoint);
+            }
+        }
         $manager = $doctrine->getManager();
         $manager->remove($formateur);
         $manager->flush();

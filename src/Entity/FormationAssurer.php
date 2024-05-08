@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FormationAssurerRepository::class)]
 class FormationAssurer
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -40,10 +41,6 @@ class FormationAssurer
 
     #[ORM\Column]
     private ?float $puFormation = null;
-
-
-
-
 
     public function getId(): ?int
     {
@@ -151,6 +148,8 @@ class FormationAssurer
 
         return $this;
     }
+
+
 
 
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Facture;
 use App\Form\FactureType;
+use App\Form\PayementType;
 use App\Repository\FactureRepository;
 use App\Repository\ParametreIotaRepository;
 use App\Service\pdfService;
@@ -23,12 +24,38 @@ use Numbers_Words;
 class FactureController extends AbstractController
 {
     #[Route('/', name: 'app_facture_index', methods: ['GET','POST'])]
-    public function index(FactureRepository $factureRepository,Request $request, EntityManagerInterface $entityManager): Response
+    public function index(FactureRepository $factureRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $facture = new Facture();
         $facture->setEtat(Facture::ETAT_NON_PAYE);
         $facture->setConfirmed(false);
         $facture->setPieceJoinRS(null);
+
+        // Create the payment form
+        $paymentForm = $this->createForm(PayementType::class);
+
+        // Handle payment form submission
+        $paymentForm->handleRequest($request);
+        if ($paymentForm->isSubmitted() && $paymentForm->isValid()) {
+            $payment = $paymentForm->getData();
+            // Set the facture association
+            $factureId = $request->request->get('facture_id');
+            $facture = $entityManager->getRepository(Facture::class)->find($factureId);
+            if (!$facture) {
+                throw $this->createNotFoundException('Facture not found');
+            }
+            $payment->setFacture($facture);
+
+            // Persist the payment
+            $entityManager->persist($payment);
+            $entityManager->flush();
+
+            // Update facture state based on payments
+            $this->updateFactureState($facture, $entityManager);
+
+            return $this->redirectToRoute('app_facture_index');
+        }
+
         $form = $this->createForm(FactureType::class, $facture, [
             'exclude_etat_field' => true,
         ]);
@@ -39,10 +66,36 @@ class FactureController extends AbstractController
 
             return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
         }
+
         return $this->render('facture/index.html.twig', [
             'factures' => $factureRepository->findAll(),
             'form' => $form,
+            'paymentForm' => $paymentForm->createView(), // Pass the payment form to the view
         ]);
+    }
+
+// Function to update facture state based on payments
+    private function updateFactureState(Facture $facture, EntityManagerInterface $entityManager): void
+    {
+        // Calculate the total amount of payments associated with the facture
+        $payments = $facture->getPayement();
+        $totalPaymentAmount = 0;
+        foreach ($payments as $payment) {
+            $totalPaymentAmount += $payment->getMontant();
+        }
+
+        // Update facture state based on total payment amount
+        if ($totalPaymentAmount >= $facture->getTotalTTC()) {
+            $facture->setEtat(Facture::ETAT_PAYE);
+        } elseif ($totalPaymentAmount > 0) {
+            $facture->setEtat(Facture::ETAT_PARTIELLEMENT_PAYE);
+        } else {
+            $facture->setEtat(Facture::ETAT_NON_PAYE);
+        }
+
+        // Persist the updated facture
+        $entityManager->persist($facture);
+        $entityManager->flush();
     }
 
     public function ajouterPieceJointe(Request $request, $id, EntityManagerInterface $entityManager): Response

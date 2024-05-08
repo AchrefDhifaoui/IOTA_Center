@@ -96,7 +96,7 @@ class FormationAssurerController extends AbstractController
     public function fetchFormationAssurerDetails(Request $request, FormationAssurer $formationAssurer): JsonResponse
     {
         $quantite = $formationAssurer->getQuantite();
-        $prixUnitaire = $formationAssurer->getPrixUnitaire();
+        $prixUnitaire = $formationAssurer->getPuFormation();
 
         return $this->json(['quantite' => $quantite, 'prixUnitaire' => $prixUnitaire]);
     }

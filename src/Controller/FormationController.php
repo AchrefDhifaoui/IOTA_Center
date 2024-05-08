@@ -171,6 +171,15 @@ class FormationController extends AbstractController
     #[Route('/delete/{id}', name: 'app_formation_delete')]
     public function delete(Request $request, Formation $formation=null, EntityManagerInterface $entityManager ,ManagerRegistry $doctrine): Response
     {
+        $nomFichierJoint = $formation->getImage();
+
+        // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
+        if ($nomFichierJoint) {
+            $cheminFichierJoint = $this->getParameter('formation_directory').'/'.$nomFichierJoint;
+            if (file_exists($cheminFichierJoint)) {
+                unlink($cheminFichierJoint);
+            }
+        }
             $manager = $doctrine->getManager();
             $manager->remove($formation);
             $manager->flush();

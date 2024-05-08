@@ -51,8 +51,7 @@ class Facture
     #[ORM\Column(nullable: true)]
     private ?float $Total_TTC = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $timbre = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $commentaire = null;
@@ -63,9 +62,19 @@ class Facture
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $pieceJoin_RS = null;
 
+    #[ORM\ManyToOne]
+    private ?Timbre $timbre = null;
+
+    /**
+     * @var Collection<int, Payement>
+     */
+    #[ORM\OneToMany(targetEntity: Payement::class, mappedBy: 'facture')]
+    private Collection $Payement;
+
     public function __construct()
     {
         $this->ligneFactures = new ArrayCollection();
+        $this->Payement = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,17 +211,7 @@ class Facture
         return $this;
     }
 
-    public function getTimbre(): ?float
-    {
-        return $this->timbre;
-    }
 
-    public function setTimbre(?float $timbre): static
-    {
-        $this->timbre = $timbre;
-
-        return $this;
-    }
 
     public function getCommentaire(): ?string
     {
@@ -246,6 +245,48 @@ class Facture
     public function setPieceJoinRS(?string $pieceJoin_RS): static
     {
         $this->pieceJoin_RS = $pieceJoin_RS;
+
+        return $this;
+    }
+
+    public function getTimbre(): ?Timbre
+    {
+        return $this->timbre;
+    }
+
+    public function setTimbre(?Timbre $timbre): static
+    {
+        $this->timbre = $timbre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payement>
+     */
+    public function getPayement(): Collection
+    {
+        return $this->Payement;
+    }
+
+    public function addPayement(Payement $payement): static
+    {
+        if (!$this->Payement->contains($payement)) {
+            $this->Payement->add($payement);
+            $payement->setFacture($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayement(Payement $payement): static
+    {
+        if ($this->Payement->removeElement($payement)) {
+            // set the owning side to null (unless already changed)
+            if ($payement->getFacture() === $this) {
+                $payement->setFacture(null);
+            }
+        }
 
         return $this;
     }
