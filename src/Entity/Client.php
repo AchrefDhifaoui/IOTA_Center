@@ -38,9 +38,13 @@ class Client
     #[ORM\OneToMany(targetEntity: FormationAssurer::class, mappedBy: 'Client')]
     private Collection $formationAssurers;
 
+    #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'client')]
+    private Collection $factures;
+
     public function __construct()
     {
         $this->formationAssurers = new ArrayCollection();
+        $this->factures = new ArrayCollection();
     }
 
 
@@ -161,6 +165,36 @@ class Client
             // set the owning side to null (unless already changed)
             if ($formationAssurer->getClient() === $this) {
                 $formationAssurer->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Facture>
+     */
+    public function getFactures(): Collection
+    {
+        return $this->factures;
+    }
+
+    public function addFacture(Facture $facture): static
+    {
+        if (!$this->factures->contains($facture)) {
+            $this->factures->add($facture);
+            $facture->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFacture(Facture $facture): static
+    {
+        if ($this->factures->removeElement($facture)) {
+            // set the owning side to null (unless already changed)
+            if ($facture->getClient() === $this) {
+                $facture->setClient(null);
             }
         }
 

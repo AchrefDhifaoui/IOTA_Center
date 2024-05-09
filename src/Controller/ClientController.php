@@ -142,6 +142,15 @@ class ClientController extends AbstractController
     #[Route('/{id}', name: 'app_client_delete')]
     public function delete(Request $request, Client $client, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
     {
+        $nomFichierJoint = $client->getImage();
+
+        // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
+        if ($nomFichierJoint) {
+            $cheminFichierJoint = $this->getParameter('client_directory').'/'.$nomFichierJoint;
+            if (file_exists($cheminFichierJoint)) {
+                unlink($cheminFichierJoint);
+            }
+        }
         $manager = $doctrine->getManager();
         $manager->remove($client);
         $manager->flush();

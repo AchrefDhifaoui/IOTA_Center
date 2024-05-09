@@ -36,7 +36,7 @@ class FormationAssurerType extends AbstractType
                 'label' => 'quantité',
                 'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('prixUnitaire', NumberType::class, [
+            ->add('puFormation', NumberType::class, [
                 'attr' => ['class' => 'form-control'],
                 'label' => 'PU',
                 'label_attr' => ['class' => 'form-label'],

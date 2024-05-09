@@ -39,7 +39,8 @@ class LigneNoteHonoraireType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'label' => 'PU',
                 'label_attr' => ['class' => 'form-label'],
-            ])->add('unite', EntityType::class, [
+            ])
+            ->add('unite', EntityType::class, [
                 'class' => Unite::class,
                 'choice_label' => 'titre',
                 'attr' => ['class' => 'form-control'],
