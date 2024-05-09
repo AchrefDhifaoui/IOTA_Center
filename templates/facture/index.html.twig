@@ -1,0 +1,503 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}NoteHonoraire index{% endblock %}
+
+
+{% block body %}
+    <div class="container-xl">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            Facture
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin: 17px">
+            <div class="card-header">
+                <h3 class="card-title">Liste des Facture</h3>
+                <div class="col-md-auto ms-auto d-print-none">
+                    <a href="" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-CreateFacture">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                        Create new Facture
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table card-table table-vcenter text-nowrap datatable" >
+                    <thead>
+                    <tr>
+
+
+                        <th>Numero</th>
+                        <th>Client</th>
+                        <th>date</th>
+                        <th>Etat</th>
+                        <th>TotalTTC</th>
+                        <th>RS_piece join</th>
+
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for facture in factures %}
+                        <tr>
+
+
+                            <td>
+                                <div class="d-flex py-1 align-items-center">
+                                    <div class="flex-fill">
+                                        <div class="font-weight-medium">{{ facture.numero }}</div>
+
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                {{ facture.client.nom }}
+
+                            </td>
+                            <td>
+                                {{ facture.dateFacture | date('Y-m-d') }}
+
+                            </td>
+                            <td>
+
+                                {% if facture.etat=="Non payé" %}
+                                    <span class="badge bg-warning me-1"></span> Non payé
+                                {% elseif facture.etat=="payé" %}
+                                    <span class="badge bg-success me-1"></span> payé
+                                {% else %}
+                                    <span class="badge bg-success me-1"></span> partiellement payé
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ facture.totalTTC }} DT
+
+                            </td>
+                            {% if facture.pieceJoinRS %}
+                                <td>
+                                    <svg style="cursor: pointer" id="openPdfIcon{{ facture.id }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3bb058" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                        <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                    </svg>
+                                </td>
+                                <script>
+                                    document.getElementById('openPdfIcon{{ facture.id }}').addEventListener('click', function() {
+                                        window.open("{{ asset('uploads/facture-RS_pdf/')}}{{ facture.pieceJoinRS }}", '_blank');
+                                    });
+                                </script>
+
+                            {% else %}
+                                <td>
+                                    <form method="post" enctype="multipart/form-data" action="{{ path('ajouter_piece_jointe', {'id': facture.id}) }}">
+                                        <input type="file" name="pieceJointePDF" id="inputPieceJointe" style="display: none;">
+                                        <label for="inputPieceJointe" style="cursor: pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f10404" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-upload">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                                <path d="M12 11v6" />
+                                                <path d="M9.5 13.5l2.5 -2.5l2.5 2.5" />
+                                            </svg>
+                                        </label>
+                                        <span id="nomFichierSelectionne"></span>
+                                        <button type="submit" class="btn btn-success" style="display: none;">Télécharger</button>
+                                    </form>
+
+
+                                    <script>
+                                        document.getElementById('inputPieceJointe').addEventListener('change', function() {
+                                            var nomFichier = this.files[0].name;
+                                            document.getElementById('nomFichierSelectionne').textContent = nomFichier;
+                                            document.querySelector('button[type="submit"]').style.display = 'inline-block';
+                                        });
+
+                                    </script>
+
+                                </td>
+                                {% endif %}
+
+
+
+
+
+
+                            <td class="text-end">
+                                <a href="{{ path('app_facture_show',{'id':facture.id}) }}">
+                                    <button class="btn btn-warning" data-bs-boundary="viewport" >
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+                                        Print</button>
+                                </a>
+
+{% if facture.confirmed==false %}
+                                <a href="{{ path('app_facture_edit',{'id':facture.id}) }}">
+                                    <button class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                        Edit</button>
+                                </a>
+
+                                <a href=""  data-bs-toggle="modal" data-bs-target="#modal-danger{{ facture.id }}">
+                                    <button class="btn btn-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16z" stroke-width="0" fill="currentColor" /><path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005h4z" stroke-width="0" fill="currentColor" /></svg>
+                                        Delete</button>
+                                </a>
+
+                                {% if facture.etat=="Non payé" or facture.etat=="partiellement payé" %}
+                                <a href="" data-bs-toggle="modal" data-bs-target="#modal-payement" data-facture-id="{{ facture.id }}">
+                                    <button class="btn btn-outline-success">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-cash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 9m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /><path d="M14 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2" /></svg>
+                                        Payer</button>
+                                </a>
+                                {% endif %}
+
+
+                                {% endif %}
+
+
+                            </td>
+                            <div class="modal modal-blur fade" id="modal-danger{{ facture.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-status bg-danger"></div>
+                                        <div class="modal-body text-center py-4">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+                                            <h3>Are you sure?</h3>
+                                            <div class="text-muted">Do you really want to remove {{ facture.numero }} with id : {{ facture.id }}</div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="w-100">
+                                                <div class="row">
+                                                    <div class="col"><a href="" class="btn w-100" data-bs-dismiss="modal">
+                                                            Cancel
+                                                        </a></div>
+                                                    <div class="col" data-bs-dismiss="modal">
+                                                        <a href="{{ path('app_facture_delete',{id:facture.id}) }}" class="btn btn-danger w-100"> Delete this Note </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </tr>
+
+
+
+
+                    {% else %}
+                        <tr>
+                            <td colspan="9">no records found</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+            {{ form_start(paymentForm) }}
+        <div class="modal modal-blur fade" id="modal-payement" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Payement</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row mb-3 align-items-end">
+
+                            <div class="col">
+                                {{ form_row(paymentForm.datePayement) }}
+                            </div>
+                            <div class="col">
+                                {{ form_row(paymentForm.modePayement) }}
+                            </div>
+                            <div class="col">
+                                {{ form_row(paymentForm.montant) }}
+                            </div>
+
+                        </div>
+                        <div class="row mb-3 align-items-end">
+
+                            <div class="col">
+                                {{ form_row(paymentForm.numero_cheque_compte) }}
+                            </div>
+                            <div class="col">
+                                {{ form_row(paymentForm.date_cheque) }}
+                            </div>
+                            <div class="col">
+                                {{ form_row(paymentForm.banque) }}
+                            </div>
+                        </div>
+                        <div class="row mb-3 align-items-end">
+                            <div class="col">
+                                <input type="hidden" id="facture-id-input" name="facture_id">
+                            </div>
+                        </div>
+
+
+
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Cancel</a>
+                            <button type="submit" class="btn btn-primary ms-auto" >
+                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                                {{ button_label|default('Save') }}
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+            <script>
+                // Listen for the show.bs.modal event on the modal
+                document.getElementById('modal-payement').addEventListener('show.bs.modal', function (event) {
+                    // Retrieve the facture id from the triggering element
+                    var factureId = event.relatedTarget.getAttribute('data-facture-id');
+                    // Set the value of the hidden input field to the facture id
+                    document.getElementById('facture-id-input').value = factureId;
+                });
+            </script>
+            {{ form_end(paymentForm) }}
+
+
+        {{ form_start(form) }}
+        <div class="modal modal-blur fade" id="modal-CreateFacture" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Facture</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row mb-3 align-items-end">
+                            <div class="col">
+                                {{ form_row(form.client) }}
+                            </div>
+                            <div class="col">
+                                {{ form_row(form.numero) }}
+                            </div>
+                            <div class="col">
+                                {{ form_row(form.date_facture) }}
+                            </div>
+                            {#                        <div class="col">#}
+                            {#                            {{ form_row(form.etat) }}#}
+                            {#                        </div>#}
+                            <div class="col">
+                                {{ form_row(form.tva) }}
+                            </div>
+
+
+                        </div>
+                        <div class="tags"
+                             data-index="{{ form.ligneFactures|length > 0 ? form.ligneFactures|last.vars.name + 1 : 0 }}"
+                             data-prototype="{{ form_widget(form.ligneFactures.vars.prototype)|e('html_attr') }}"
+                        ></div>
+                        <div class="row mb-3 align-items-end">
+                            <div class="col">
+                                {{ form_row(form.commentaire) }}
+                            </div>
+                        </div>
+                        {#                    add 4 field on buttom of modal #}
+                        <div class="row justify-content-end">
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    {{ form_row(form.Total_HT) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    {{ form_row(form.Total_TVA) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    {{ form_row(form.Total_TTC) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    {{ form_row(form.timbre) }}
+                                </div>
+                            </div>
+
+
+                    </div>
+
+
+
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Cancel</a>
+                        <button type="button" class="btn btn-primary ms-auto" id="add_item_link" data-collection-holder-class="tags">Add a Ligne</button>
+
+                        <button type="submit" class="btn btn-primary ms-auto" >
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                            {{ button_label|default('Save') }}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document
+                .querySelectorAll('#add_item_link')
+                .forEach(btn => {
+                    btn.addEventListener("click", addFormToCollection)
+                });
+
+
+            function addFormToCollection(e) {
+                const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+                const item = document.createElement('div');
+                item.className="card";
+                item.style.padding="15px"
+                item.style.margin="15px"
+                item.innerHTML = collectionHolder
+                    .dataset
+                    .prototype
+                    .replace(
+                        /__name__/g,
+                        collectionHolder.dataset.index
+                    );
+                item.querySelector('div').classList.add('row', 'mb-3', 'align-items-end');
+                item.querySelectorAll('div > div').forEach(col => {
+                    col.classList.add('col');
+                });
+
+                collectionHolder.appendChild(item);
+
+                collectionHolder.dataset.index++;
+                addTagFormDeleteLink(item);
+            }
+
+
+            function addTagFormDeleteLink(item) {
+                const removeFormButton = document.createElement('button');
+                removeFormButton.innerText = 'Delete this Ligne';
+                removeFormButton.classList.add('btn', 'btn-danger'); // Adding Bootstrap classes for styling
+
+                // Wrap the delete button in a div with class col-1
+                const deleteWrapper = document.createElement('div');
+                deleteWrapper.appendChild(removeFormButton);
+                item.appendChild(deleteWrapper);
+
+                removeFormButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // remove the div for the tag form
+                    item.remove();
+                });
+            }
+        </script>
+            <script>
+                // Function to get selected RS and TVA values
+                // Get the RS and TVA select elements
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Fonction pour mettre à jour le total HT d'une ligne
+                    function updatePrixTotalHT(ligneContainer) {
+                        var prixUnitaireField = ligneContainer.querySelector('[id^="facture_ligneFactures_"][id$="_prixUnitaire"]');
+                        var quantiteField = ligneContainer.querySelector('[id^="facture_ligneFactures_"][id$="_quantite"]');
+                        var prixTotalHTField = ligneContainer.querySelector('[id^="facture_ligneFactures_"][id$="_totalHT"]');
+                        if (!prixUnitaireField || !quantiteField || !prixTotalHTField) {
+                            return;
+                        }
+                        var prixUnitaire = parseFloat(prixUnitaireField.value);
+                        var quantite = parseInt(quantiteField.value);
+                        var prixTotalHT = prixUnitaire * quantite;
+                        prixTotalHTField.value = prixTotalHT.toFixed(2);
+                    }
+
+                    // Fonction pour mettre à jour les totaux généraux
+                    function updateTotals() {
+                        updateTotalHT();
+                        updateTotalTVA();
+                        updateTotalTTC();
+                    }
+
+                    // Fonction pour gérer les événements d'entrée
+                    function handleInput(event) {
+                        var target = event.target;
+                        if (target.id.includes('_prixUnitaire') || target.id.includes('_quantite')) {
+                            updatePrixTotalHT(target.closest('.row'));
+                        }
+                        updateTotals();
+                    }
+
+                    // Fonction pour mettre à jour le total HT de toutes les lignes
+                    function updateTotalHT() {
+                        var totalHTFields = document.querySelectorAll('[id^="facture_ligneFactures_"][id$="_totalHT"]');
+                        var totalHT = 0;
+                        totalHTFields.forEach(function(field) {
+                            if (!isNaN(parseFloat(field.value))) {
+                                totalHT += parseFloat(field.value);
+                            }
+                        });
+                        document.getElementById('facture_Total_HT').value = totalHT.toFixed(2);
+                    }
+
+                    // Fonction pour mettre à jour le total TVA
+                    function updateTotalTVA() {
+                        var totalHT = parseFloat(document.getElementById('facture_Total_HT').value);
+                        var totalTVA = totalHT * tvaRate;
+                        document.getElementById('facture_Total_TVA').value = totalTVA.toFixed(2);
+                    }
+
+                    // Fonction pour mettre à jour le total TTC
+                    function updateTotalTTC() {
+                        var totalHT = parseFloat(document.getElementById('facture_Total_HT').value);
+                        var totalTVA = parseFloat(document.getElementById('facture_Total_TVA').value);
+                        var totalTTC = totalHT + totalTVA;
+                        document.getElementById('facture_Total_TTC').value = totalTTC.toFixed(2);
+                    }
+
+                    // Fonction pour mettre à jour les taux TVA
+                    function updateRates() {
+                        const selectedTVA = tvaSelect.options[tvaSelect.selectedIndex].text;
+                        tvaRate = parseFloat(selectedTVA.replace('%', '')) / 100;
+                    }
+
+                    // Ajouter les écouteurs d'événements
+                    document.addEventListener('input', handleInput);
+                    const tvaSelect = document.getElementById('facture_tva');
+                    var tvaRate;
+
+                    tvaSelect.addEventListener('input', updateRates);
+                });
+
+
+
+
+            </script>
+        {{ form_end(form) }}
+
+
+    </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/dist/libs/nouislider/dist/nouislider.min.js') }}" defer></script>
+    <script src="{{ asset('assets/dist/libs/litepicker/dist/litepicker.js') }}" defer></script>
+    <script src="{{ asset('assets/dist/libs/tom-select/dist/js/tom-select.base.min.js') }}" defer></script>
+
+{% endblock %}

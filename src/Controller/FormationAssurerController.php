@@ -28,7 +28,6 @@ class FormationAssurerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($formationAssurer);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_formation_assurer_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('formation_assurer/index.html.twig', [
@@ -97,7 +96,7 @@ class FormationAssurerController extends AbstractController
     public function fetchFormationAssurerDetails(Request $request, FormationAssurer $formationAssurer): JsonResponse
     {
         $quantite = $formationAssurer->getQuantite();
-        $prixUnitaire = $formationAssurer->getPrixUnitaire();
+        $prixUnitaire = $formationAssurer->getPuFormation();
 
         return $this->json(['quantite' => $quantite, 'prixUnitaire' => $prixUnitaire]);
     }

@@ -7,3 +7,7 @@ fetch_formation_assurer_details:
     path: /fetch-formation-assurer-details/{id}
     controller: App\Controller\FormationAssurerController::fetchFormationAssurerDetails
     methods: ['GET']
+ajouter_piece_jointe:
+    path: '/ajouter-piece-jointe/{id}'
+    controller: 'App\Controller\FactureController::ajouterPieceJointe'
+    methods: [ 'POST' ]

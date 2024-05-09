@@ -74,17 +74,16 @@ class NoteHonoraireController extends AbstractController
         }
         $RS = $noteHonoraire->getRS();
         if ($RS) {
-            $vatRate = $RS->getTaux() / 100;
-            $vatTotal = $netTotal * $vatRate;
+            $tauxRS = $RS->getTaux() / 100;
+            $totalRS = $netTotal * $tauxRS;
         } else {
-            $vatTotal = 0;
+            $totalRS = 0;
         }
-        $totalIncludingVAT = $netTotal - $vatTotal;
         $htmlContent = $twig->render('note_honoraire/show.html.twig', [
             'note_honoraire' => $noteHonoraire,
             'netTotal' => $netTotal,
-            'vatTotal' => $vatTotal,
-            'totalIncludingVAT' => $totalIncludingVAT,
+            'totalRS' => $totalRS,
+
         ]);
 
         $pdfContent = $pdf->generateBinaryPDF($htmlContent);
@@ -128,7 +127,7 @@ class NoteHonoraireController extends AbstractController
     }
 
     #[Route('delete/{id}', name: 'app_note_honoraire_delete')]
-    public function delete(Request $request, NoteHonoraire $noteHonoraire=null, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
+    public function delete(NoteHonoraire $noteHonoraire=null,ManagerRegistry $doctrine): Response
     {
         $manager = $doctrine->getManager();
         $manager->remove($noteHonoraire);
