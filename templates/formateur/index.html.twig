@@ -59,7 +59,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                             </a>
                             <div class="dropdown-menu dropdown-menu-start">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-show{{ formateur.id }}" class="dropdown-item">view</a>
+                                <a href="{{ path('app_formateur_show',{'id':formateur.id}) }}" class="dropdown-item">view</a>
                                 <a href="{{ path('app_formateur_edit',{'id':formateur.id}) }}"  class="dropdown-item">edit</a>
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger{{ formateur.id }}" class="dropdown-item text-danger">Delete</a>
                             </div>
@@ -110,39 +110,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal modal-blur fade" id="modal-show{{ formateur.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+{#                    <div class="modal modal-blur fade" id="modal-show{{ formateur.id }}" tabindex="-1" role="dialog" aria-hidden="true">#}
 
-                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Formation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="col-lg-10">
-                                        <div class="card" style="border: none">
-                                            <div class="row">
-                                                <div class="col-5">
-                                                    <!-- Photo -->
-                                                    <img src="{{ asset('uploads/formateur-image/') }}{{ formateur.image }}" class="w-100 h-100 object-cover card-img-start"/>
-                                                </div>
-                                                <div class="col-7" >
-                                                    <div class="card-body" >
-                                                        <h3 class="card-title">{{ formateur.nom }}  {{ formateur.prenom }}</h3>
-                                                        <p class="text-muted"> <strong>Email : </strong> {{ formateur.email }}</p>
-                                                        <p class="text-muted"> <strong>Tel : </strong> {{ formateur.telephone }}</p>
-                                                        <p class="text-muted"> <strong>Adresse : </strong> {{ formateur.adresse }}</p>
-                                                        <p class="text-muted"> <strong>CIN : </strong> {{ formateur.cin }}</p>
-                                                        <p class="text-muted"> <strong>Domaine : </strong> {% for domaine in formateur.domaine %} {{ domaine.titre }} , {% endfor %}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{#                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">#}
+{#                            <div class="modal-content">#}
+{#                                <div class="modal-header">#}
+{#                                    <h5 class="modal-title">Formation</h5>#}
+{#                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
+{#                                </div>#}
+{#                                <div class="modal-body">#}
+{#                                    <div class="col-lg-10">#}
+{#                                        <div class="card" style="border: none">#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-5">#}
+{#                                                    <!-- Photo -->#}
+{#                                                    <img src="{{ asset('uploads/formateur-image/') }}{{ formateur.image }}" class="w-100 h-100 object-cover card-img-start"/>#}
+{#                                                </div>#}
+{#                                                <div class="col-7" >#}
+{#                                                    <div class="card-body" >#}
+{#                                                        <h3 class="card-title">{{ formateur.nom }}  {{ formateur.prenom }}</h3>#}
+{#                                                        <p class="text-muted"> <strong>Email : </strong> {{ formateur.email }}</p>#}
+{#                                                        <p class="text-muted"> <strong>Tel : </strong> {{ formateur.telephone }}</p>#}
+{#                                                        <p class="text-muted"> <strong>Adresse : </strong> {{ formateur.adresse }}</p>#}
+{#                                                        <p class="text-muted"> <strong>CIN : </strong> {{ formateur.cin }}</p>#}
+{#                                                        <p class="text-muted"> <strong>Domaine : </strong> {% for domaine in formateur.domaine %} {{ domaine.titre }} , {% endfor %}</p>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
 
 
 

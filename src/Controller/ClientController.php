@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Client;
+use App\Entity\FormationAssurer;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,13 +90,17 @@ class ClientController extends AbstractController
 //        ]);
 //    }
 //
-//    #[Route('/{id}', name: 'app_client_show', methods: ['GET'])]
-//    public function show(Client $client): Response
-//    {
-//        return $this->render('client/show.html.twig', [
-//            'client' => $client,
-//        ]);
-//    }
+    #[Route('/{id}', name: 'app_client_show', methods: ['GET'])]
+    public function show(Client $client, EntityManagerInterface $entityManager): Response
+    {
+        $formations = $entityManager->getRepository(FormationAssurer::class)->findBy(['Client' => $client]);
+        $factures = $client->getFactures();
+        return $this->render('client/show.html.twig', [
+            'client' => $client,
+            'formation_assurers' => $formations,
+            'factures'=>$factures
+        ]);
+    }
 
     #[Route('/{id}/edit', name: 'app_client_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Client $client, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
