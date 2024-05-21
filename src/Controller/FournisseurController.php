@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Client;
-use App\Entity\FormationAssurer;
-use App\Form\ClientType;
-use App\Repository\ClientRepository;
+use App\Entity\Fournisseur;
+use App\Form\FournisseurType;
+use App\Repository\FournisseurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,23 +14,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-#[Route('/client')]
-class ClientController extends AbstractController
+#[Route('/fournisseur')]
+class FournisseurController extends AbstractController
 {
-    #[Route('/', name: 'app_client_index', methods: ['GET', 'POST'])]
-    public function index(ClientRepository $clientRepository,Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('/', name: 'app_fournisseur_index', methods: ['GET', 'POST'])]
+    public function index(FournisseurRepository $fournisseurRepository,Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
-
         $searchTerm = $request->query->get('searchTerm');
 
         // Fetch formations based on search term
         if ($searchTerm) {
-            $clients = $clientRepository->findByTitle($searchTerm);
+            $fournisseurs = $fournisseurRepository->findByTitle($searchTerm);
         } else {
-            $clients = $clientRepository->findAll();
+            $fournisseurs = $fournisseurRepository->findAll();
         }
-        $client = new Client();
-        $form = $this->createForm(ClientType::class, $client);
+        $fournisseur = new Fournisseur();
+        $form = $this->createForm(FournisseurType::class, $fournisseur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -44,7 +42,7 @@ class ClientController extends AbstractController
                 // Move the file to the directory where brochures are stored
                 try {
                     $brochureFile->move(
-                        $this->getParameter('client_directory'),
+                        $this->getParameter('fournisseur_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
@@ -53,59 +51,56 @@ class ClientController extends AbstractController
                 }
 
                 // Update formation image
-                $client->setImage($newFilename);
+                $fournisseur->setImage($newFilename);
             }
-            $entityManager->persist($client);
+            $entityManager->persist($fournisseur);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_fournisseur_index', [], Response::HTTP_SEE_OTHER);
         }
-        $numberOfClients = count($clients);
+        $numberOfFournisseurs = count($fournisseurs);
 
-        return $this->render('client/index.html.twig', [
-            'clients' => $clients,
-            'numberOfClients' => $numberOfClients,
+        return $this->render('fournisseur/index.html.twig', [
+            'fournisseurs' => $fournisseurs,
+            'numberOfFournisseurs' => $numberOfFournisseurs,
             'form' => $form,
         ]);
     }
 
-
-//    #[Route('/new', name: 'app_client_new', methods: ['GET', 'POST'])]
+//    #[Route('/new', name: 'app_fournisseur_new', methods: ['GET', 'POST'])]
 //    public function new(Request $request, EntityManagerInterface $entityManager): Response
 //    {
-//        $client = new Client();
-//        $form = $this->createForm(ClientType::class, $client);
+//        $fournisseur = new Fournisseur();
+//        $form = $this->createForm(FournisseurType::class, $fournisseur);
 //        $form->handleRequest($request);
 //
 //        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->persist($client);
+//            $entityManager->persist($fournisseur);
 //            $entityManager->flush();
 //
-//            return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+//            return $this->redirectToRoute('app_fournisseur_index', [], Response::HTTP_SEE_OTHER);
 //        }
 //
-//        return $this->render('client/new.html.twig', [
-//            'client' => $client,
+//        return $this->render('fournisseur/new.html.twig', [
+//            'fournisseur' => $fournisseur,
 //            'form' => $form,
 //        ]);
 //    }
-//
-    #[Route('/{id}', name: 'app_client_show', methods: ['GET'])]
-    public function show(Client $client, EntityManagerInterface $entityManager): Response
+
+    #[Route('/{id}', name: 'app_fournisseur_show', methods: ['GET'])]
+    public function show(Fournisseur $fournisseur): Response
     {
-        $formations = $entityManager->getRepository(FormationAssurer::class)->findBy(['Client' => $client]);
-        $factures = $client->getFactures();
-        return $this->render('client/show.html.twig', [
-            'client' => $client,
-            'formation_assurers' => $formations,
-            'factures'=>$factures
+        $facture = $fournisseur->getFactureAchats();
+        return $this->render('fournisseur/show.html.twig', [
+            'fournisseur' => $fournisseur,
+            'facture_achats'=>$facture
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_client_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Client $client, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    #[Route('/{id}/edit', name: 'app_fournisseur_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Fournisseur $fournisseur, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(ClientType::class, $client);
+        $form = $this->createForm(FournisseurType::class, $fournisseur);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -122,7 +117,7 @@ class ClientController extends AbstractController
                 // Move the file to the directory where brochures are stored
                 try {
                     $brochureFile->move(
-                        $this->getParameter('client_directory'),
+                        $this->getParameter('fournisseur_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
@@ -131,35 +126,35 @@ class ClientController extends AbstractController
 
                 // updates the 'brochureFilename' property to store the PDF file name
                 // instead of its contents
-                $client->setImage($newFilename);
+                $fournisseur->setImage($newFilename);
             }
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_fournisseur_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('client/edit.html.twig', [
-            'client' => $client,
+        return $this->render('fournisseur/edit.html.twig', [
+            'fournisseur' => $fournisseur,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_client_delete')]
-    public function delete(Request $request, Client $client, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
+    #[Route('/delete/{id}', name: 'app_fournisseur_delete')]
+    public function delete(Request $request, Fournisseur $fournisseur, EntityManagerInterface $entityManager ,ManagerRegistry $doctrine): Response
     {
-        $nomFichierJoint = $client->getImage();
+        $nomFichierJoint = $fournisseur->getImage();
 
         // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
         if ($nomFichierJoint) {
-            $cheminFichierJoint = $this->getParameter('client_directory').'/'.$nomFichierJoint;
+            $cheminFichierJoint = $this->getParameter('fournisseur_directory').'/'.$nomFichierJoint;
             if (file_exists($cheminFichierJoint)) {
                 unlink($cheminFichierJoint);
             }
         }
         $manager = $doctrine->getManager();
-        $manager->remove($client);
+        $manager->remove($fournisseur);
         $manager->flush();
 
-        return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_fournisseur_index', [], Response::HTTP_SEE_OTHER);
     }
 }
