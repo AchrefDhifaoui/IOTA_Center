@@ -90,8 +90,10 @@ class FournisseurController extends AbstractController
     #[Route('/{id}', name: 'app_fournisseur_show', methods: ['GET'])]
     public function show(Fournisseur $fournisseur): Response
     {
+        $facture = $fournisseur->getFactureAchats();
         return $this->render('fournisseur/show.html.twig', [
             'fournisseur' => $fournisseur,
+            'facture_achats'=>$facture
         ]);
     }
 

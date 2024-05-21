@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Formateur;
 use App\Entity\Formation;
+use App\Entity\FormationAssurer;
 use App\Form\FormateurType;
 use App\Repository\FormateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,13 +90,17 @@ class FormateurController extends AbstractController
 //        ]);
 //    }
 //
-//    #[Route('/{id}', name: 'app_formateur_show', methods: ['GET'])]
-//    public function show(Formateur $formateur): Response
-//    {
-//        return $this->render('formateur/show.html.twig', [
-//            'formateur' => $formateur,
-//        ]);
-//    }
+    #[Route('/{id}', name: 'app_formateur_show', methods: ['GET'])]
+    public function show(Formateur $formateur, EntityManagerInterface $entityManager): Response
+    {
+        $formations = $entityManager->getRepository(FormationAssurer::class)->findBy(['formateur' => $formateur]);
+        $Note = $formateur->getNoteHonoraires();
+        return $this->render('formateur/show.html.twig', [
+            'formateur' => $formateur,
+            'formation_assurers' => $formations,
+            'note_honoraires'=>$Note
+        ]);
+    }
 
     #[Route('/{id}/edit', name: 'app_formateur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Formateur $formateur, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
