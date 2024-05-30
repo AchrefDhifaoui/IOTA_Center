@@ -12,6 +12,8 @@ use App\Service\numberToWord;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,6 +60,7 @@ class FactureController extends AbstractController
 
         $form = $this->createForm(FactureType::class, $facture, [
             'exclude_etat_field' => true,
+            'exclude_isConfirmer_field'=>true
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -66,11 +69,21 @@ class FactureController extends AbstractController
 
             return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
         }
+        $factures = $factureRepository->findAll();
+        $facturePayments = [];
+        foreach ($factures as $facture) {
+            $totalPaymentAmount = 0;
+            foreach ($facture->getPayement() as $payment) {
+                $totalPaymentAmount += $payment->getMontant();
+            }
+            $facturePayments[$facture->getId()] = $totalPaymentAmount;
+        }
 
         return $this->render('facture/index.html.twig', [
             'factures' => $factureRepository->findAll(),
             'form' => $form,
             'paymentForm' => $paymentForm->createView(), // Pass the payment form to the view
+            'facturePayments' => $facturePayments, // Pass payment amounts to the template
         ]);
     }
 
@@ -96,6 +109,42 @@ class FactureController extends AbstractController
         // Persist the updated facture
         $entityManager->persist($facture);
         $entityManager->flush();
+    }
+    /**
+     * @Route("/generate-pdf", name="generate_pdf", methods={"POST"})
+     */
+    public function generatePdf(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Render the HTML for the PDF
+        $html = $this->renderView('facture/invoice_list.html.twig', [
+            'factures' => $data['factures']
+        ]);
+
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $output = $dompdf->output();
+        $response = new Response($output);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="filtered_factures.pdf"');
+
+        return $response;
     }
 
     public function ajouterPieceJointe(Request $request, $id, EntityManagerInterface $entityManager): Response

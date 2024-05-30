@@ -109,7 +109,7 @@ class FormationAssurer
     {
         $dateString = $this->dateDebut ? $this->dateDebut->format('Y-m-d') : 'No Date';
 
-        return $this->formation->getTitre() . ' (' . $dateString . ')';
+        return $this->getClient() . ' - ' . $this->formation->getTitre() . ' (' . $dateString . ')';
     }
 
 

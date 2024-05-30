@@ -11,3 +11,15 @@ ajouter_piece_jointe:
     path: '/ajouter-piece-jointe/{id}'
     controller: 'App\Controller\FactureController::ajouterPieceJointe'
     methods: [ 'POST' ]
+
+generate_pdf:
+    path: /generate-pdf
+    controller: App\Controller\FactureController::generatePdf
+
+generatefactureAchat_pdf:
+    path: /generatefactureAchat_pdf
+    controller: App\Controller\FactureAchatController::generatefactureAchat_pdf
+
+generatenoteHonoraire_pdf:
+    path: /generatenoteHonoraire_pdf
+    controller: App\Controller\NoteHonoraireController::generatenoteHonoraire_pdf

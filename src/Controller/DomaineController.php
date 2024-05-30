@@ -6,6 +6,7 @@ use App\Entity\Domaine;
 use App\Form\DomaineType;
 use App\Repository\DomaineRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +15,21 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/domaine')]
 class DomaineController extends AbstractController
 {
-    #[Route('/', name: 'app_domaine_index', methods: ['GET'])]
-    public function index(DomaineRepository $domaineRepository): Response
+    #[Route('/', name: 'app_domaine_index', methods: ['GET','POST'])]
+    public function index(DomaineRepository $domaineRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $domaine = new Domaine();
+        $formDomaine = $this->createForm(DomaineType::class, $domaine);
+        $formDomaine->handleRequest($request);
+        if ($formDomaine->isSubmitted() && $formDomaine->isValid()) {
+            $entityManager->persist($domaine);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_domaine_index', [], Response::HTTP_SEE_OTHER);
+        }
         return $this->render('domaine/index.html.twig', [
             'domaines' => $domaineRepository->findAll(),
+            'formDomaine' => $formDomaine->createView(),
         ]);
     }
 
@@ -68,14 +79,13 @@ class DomaineController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_domaine_delete', methods: ['POST'])]
-    public function delete(Request $request, Domaine $domaine, EntityManagerInterface $entityManager): Response
+    #[Route('delete/{id}', name: 'app_domaine_delete')]
+    public function delete( Domaine $domaine,ManagerRegistry $doctrine): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$domaine->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($domaine);
-            $entityManager->flush();
-        }
+        $manager = $doctrine->getManager();
+        $manager->remove($domaine);
+        $manager->flush();
 
-        return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_domaine_index', [], Response::HTTP_SEE_OTHER);
     }
 }

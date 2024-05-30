@@ -1,0 +1,173 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Setting index{% endblock %}
+
+
+{% block body %}
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <h2 class="page-title">
+                        Paramétre
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page body -->
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-3 d-none d-md-block border-end">
+                        <div class="card-body">
+                            <h4 class="subheader">Parametre du société</h4>
+                            <div class="list-group list-group-transparent">
+                                <a href="{{ path('user_profile') }}" class="list-group-item list-group-item-action d-flex align-items-center ">Mon compte</a>
+                                <a href="{{ path('parametre_iota_edit') }}" class="list-group-item list-group-item-action d-flex align-items-center ">Parametre IOTA</a>
+                            </div>
+                            <br>
+                            <h4 class="subheader"> Parametre Formation </h4>
+                            <div class="list-group list-group-transparent">
+                                <a href="{{path('app_domaine_index')}}" class="list-group-item list-group-item-action d-flex align-items-center ">Domaine</a>
+                                <a href="{{ path('app_mode_index') }}" class="list-group-item list-group-item-action d-flex align-items-center "> Mode de formation</a>
+                                <a href="{{ path('app_unite_index') }}" class="list-group-item list-group-item-action d-flex align-items-center active">unité</a>
+                            </div>
+                            <br>
+                            <h4 class="subheader">Parametre financier</h4>
+                            <div class="list-group list-group-transparent">
+                                <a href="{{ path('app_r_s_index') }}" class="list-group-item list-group-item-action">Retenue a ressource</a>
+                                <a href="{{ path('app_t_v_a_index') }}" class="list-group-item list-group-item-action">TVA</a>
+                                <a href="{{ path('app_timbre_index') }}" class="list-group-item list-group-item-action">Timbre</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col d-flex flex-column">
+                        <div class="card-body">
+                            <h3 class="card-title">Unites</h3>
+                            <div class="table-responsive">
+                                <table class="table card-table table-vcenter text-nowrap datatable" >
+                                    <thead>
+                                    <tr>
+
+                                        <th class="w-1">No. <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
+                                        </th>
+                                        <th>Titre</th>
+
+
+
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for unite in unites %}
+                                        <tr>
+
+                                            <td><span class="text-muted">{{ loop.index }}</span></td>
+                                            <td>
+                                                <div class="d-flex py-1 align-items-center">
+                                                    <div class="flex-fill">
+                                                        <div class="font-weight-medium">{{ unite.titre }}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+
+
+
+
+
+                                            <td class="text-end">
+                                                <a href=""  data-bs-toggle="modal" data-bs-target="#modal-danger{{ unite.id }}">
+                                                    <button class="btn btn-danger">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16z" stroke-width="0" fill="currentColor" /><path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005h4z" stroke-width="0" fill="currentColor" /></svg>
+                                                        Supprimer</button>
+                                                </a>
+                                            </td>
+                                            <div class="modal modal-blur fade" id="modal-danger{{ unite.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="modal-status bg-danger"></div>
+                                                        <div class="modal-body text-center py-4">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+                                                            <h3>Are you sure?</h3>
+                                                            <div class="text-muted">Do you really want to remove {{ unite.titre }} with id : {{ unite.id }}</div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="w-100">
+                                                                <div class="row">
+                                                                    <div class="col"><a href="" class="btn w-100" data-bs-dismiss="modal">
+                                                                            Cancel
+                                                                        </a></div>
+                                                                    <div class="col" data-bs-dismiss="modal">
+                                                                        <a href="{{ path('app_unite_delete',{id:unite.id}) }}" class="btn btn-danger w-100"> Delete this unite </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="9">no records found</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer bg-transparent mt-auto">
+                                <div class="btn-list justify-content-end">
+
+                                    <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-unite" >
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_start(form) }}
+    <div class="modal modal-blur fade" id="modal-unite" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau Unite</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+
+                        {{ form_row(form.titre) }}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary ms-auto" >
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        {{ button_label|default('Save') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
