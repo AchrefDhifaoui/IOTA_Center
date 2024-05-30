@@ -27,7 +27,7 @@ class FournisseurType extends AbstractType
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('telephone', TextType::class, [
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-control','name'=>'input-mask','data-mask'=>'(+216) 00 000 000','data-mask-visible'=>'true','placeholder'=>'(+216) 00 000 000','autocomplete'=>'off'],
                 'label' => 'Telephone',
                 'label_attr' => ['class' => 'form-label'],
             ])

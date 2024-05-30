@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FactureAchatRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,6 +45,17 @@ class FactureAchat
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
+
+    /**
+     * @var Collection<int, PayementFactureAchat>
+     */
+    #[ORM\OneToMany(targetEntity: PayementFactureAchat::class, mappedBy: 'factureAchat')]
+    private Collection $payementFactureAchats;
+
+    public function __construct()
+    {
+        $this->payementFactureAchats = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -153,6 +166,36 @@ class FactureAchat
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PayementFactureAchat>
+     */
+    public function getPayementFactureAchats(): Collection
+    {
+        return $this->payementFactureAchats;
+    }
+
+    public function addPayementFactureAchat(PayementFactureAchat $payementFactureAchat): static
+    {
+        if (!$this->payementFactureAchats->contains($payementFactureAchat)) {
+            $this->payementFactureAchats->add($payementFactureAchat);
+            $payementFactureAchat->setFactureAchat($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayementFactureAchat(PayementFactureAchat $payementFactureAchat): static
+    {
+        if ($this->payementFactureAchats->removeElement($payementFactureAchat)) {
+            // set the owning side to null (unless already changed)
+            if ($payementFactureAchat->getFactureAchat() === $this) {
+                $payementFactureAchat->setFactureAchat(null);
+            }
+        }
 
         return $this;
     }

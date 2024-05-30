@@ -42,6 +42,12 @@ class NoteHonoraire
     #[ORM\ManyToOne]
     private ?RS $RS = null;
 
+    /**
+     * @var Collection<int, PayementNoteHonoraire>
+     */
+    #[ORM\OneToMany(targetEntity: PayementNoteHonoraire::class, mappedBy: 'note')]
+    private Collection $payementNoteHonoraires;
+
 
 
 
@@ -49,6 +55,7 @@ class NoteHonoraire
     public function __construct()
     {
         $this->ligneNoteHonoraires = new ArrayCollection();
+        $this->payementNoteHonoraires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,6 +161,36 @@ class NoteHonoraire
     public function setRS(?RS $RS): static
     {
         $this->RS = $RS;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PayementNoteHonoraire>
+     */
+    public function getPayementNoteHonoraires(): Collection
+    {
+        return $this->payementNoteHonoraires;
+    }
+
+    public function addPayementNoteHonoraire(PayementNoteHonoraire $payementNoteHonoraire): static
+    {
+        if (!$this->payementNoteHonoraires->contains($payementNoteHonoraire)) {
+            $this->payementNoteHonoraires->add($payementNoteHonoraire);
+            $payementNoteHonoraire->setNote($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayementNoteHonoraire(PayementNoteHonoraire $payementNoteHonoraire): static
+    {
+        if ($this->payementNoteHonoraires->removeElement($payementNoteHonoraire)) {
+            // set the owning side to null (unless already changed)
+            if ($payementNoteHonoraire->getNote() === $this) {
+                $payementNoteHonoraire->setNote(null);
+            }
+        }
 
         return $this;
     }

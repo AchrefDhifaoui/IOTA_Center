@@ -64,4 +64,13 @@ class FormationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findFormationsOrderedByFormationAssurerCount()
+    {
+        return $this->createQueryBuilder('f')
+            ->leftJoin('f.formationAssurer', 'fa')
+            ->groupBy('f.id')
+            ->orderBy('COUNT(fa.id)', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }
