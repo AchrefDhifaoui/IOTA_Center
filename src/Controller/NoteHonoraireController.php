@@ -6,11 +6,14 @@ use App\Entity\LigneNoteHonoraire;
 use App\Entity\NoteHonoraire;
 use App\Entity\ParametreIota;
 use App\Form\NoteHonoraireType;
+use App\Form\PayementNoteHonoraireType;
 use App\Repository\NoteHonoraireRepository;
 use App\Service\pdfService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +30,29 @@ class NoteHonoraireController extends AbstractController
         $noteHonoraire->setEtat(NoteHonoraire::ETAT_NON_PAYE);
         $iota=$entityManager->getRepository(ParametreIota::class)->find(1);
         $noteHonoraire->setClient($iota);
+
+        $paymentForm = $this->createForm(PayementNoteHonoraireType::class);
+        // Handle payment form submission
+        $paymentForm->handleRequest($request);
+        if ($paymentForm->isSubmitted() && $paymentForm->isValid()) {
+            $payment = $paymentForm->getData();
+            // Set the facture association
+            $noteId = $request->request->get('note_id');
+            $note = $entityManager->getRepository(NoteHonoraire::class)->find($noteId);
+            if (!$note) {
+                throw $this->createNotFoundException('note not found');
+            }
+            $payment->setNote($note);
+            // Persist the payment
+            $entityManager->persist($payment);
+            $entityManager->flush();
+
+            // Update facture state based on payments
+            $this->updateNoteState($note, $entityManager);
+
+            return $this->redirectToRoute('app_note_honoraire_index');
+        }
+
         $form = $this->createForm(NoteHonoraireType::class, $noteHonoraire, [
             'exclude_etat_field' => true,
         ]);
@@ -38,11 +64,89 @@ class NoteHonoraireController extends AbstractController
 
             return $this->redirectToRoute('app_note_honoraire_index', [], Response::HTTP_SEE_OTHER);
         }
+        $noteHonoraires = $noteHonoraireRepository->findAll();
+        $noteHonoraireTotals = [];
+
+        foreach ($noteHonoraires as $nh) {
+            $netTotal = 0;
+            foreach ($nh->getLigneNoteHonoraires() as $ligne) {
+                $netTotal += $ligne->getPrixTotalHT();
+            }
+            $noteHonoraireTotals[$nh->getId()] = $netTotal;
+        }
+
         return $this->render('note_honoraire/index.html.twig', [
-            'note_honoraires' => $noteHonoraireRepository->findAll(),
+            'note_honoraires' => $noteHonoraires,
             'form' => $form,
+            'noteHonoraireTotals' => $noteHonoraireTotals,
+            'paymentForm' => $paymentForm->createView(),
         ]);
     }
+    private function updateNoteState(NoteHonoraire $note, EntityManagerInterface $entityManager): void
+    {
+        // Calculate the total amount of payments associated with the note
+        $payments = $note->getPayementNoteHonoraires();
+        $totalPaymentAmount = 0;
+        foreach ($payments as $payment) {
+            $totalPaymentAmount += $payment->getMontant();
+        }
+
+        // Calculate the total HT amount from all ligneNoteHonoraires
+        $totalHTAmount = 0;
+        foreach ($note->getLigneNoteHonoraires() as $ligne) {
+            $totalHTAmount += $ligne->getPrixTotalHT();
+        }
+
+        // Update note state based on total payment amount
+        if ($totalPaymentAmount >= $totalHTAmount) {
+            $note->setEtat(NoteHonoraire::ETAT_PAYE);
+        } elseif ($totalPaymentAmount > 0) {
+            $note->setEtat(NoteHonoraire::ETAT_PARTIELLEMENT_PAYE);
+        } else {
+            $note->setEtat(NoteHonoraire::ETAT_NON_PAYE);
+        }
+
+        // Persist the updated note
+        $entityManager->persist($note);
+        $entityManager->flush();
+    }
+    /**
+     * @Route("/generatenoteHonoraire_pdf", name="generatenoteHonoraire_pdf", methods={"POST"})
+     */
+    public function generatenoteHonoraire_pdf(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Render the HTML for the PDF
+        $html = $this->renderView('note_honoraire/note_list.html.twig', [
+            'notes' => $data['notes']
+        ]);
+
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $output = $dompdf->output();
+        $response = new Response($output);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="filtered_factures.pdf"');
+
+        return $response;
+    }
+
 
 //    #[Route('/new', name: 'app_note_honoraire_new', methods: ['GET', 'POST'])]
 //    public function new(Request $request, EntityManagerInterface $entityManager): Response

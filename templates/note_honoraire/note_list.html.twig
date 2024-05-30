@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Filtered note</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px 12px; border: 1px solid #ddd; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+<h1>liste des notes d'honoraire </h1>
+<table>
+    <thead>
+    <tr>
+        <th>Numero</th>
+        <th>Formateur</th>
+        <th>Date</th>
+        <th>Total TTC</th>
+        <th>Etat</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for note in notes %}
+        <tr>
+            <td>{{ note.numero }}</td>
+            <td>{{ note.formateur }}</td>
+            <td>{{ note.date }}</td>
+            <td>{{ note.totalTTC }}</td>
+            <td>{{ note.etat }}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

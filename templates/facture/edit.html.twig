@@ -1,6 +1,6 @@
 {% extends 'template.html.twig' %}
 
-{% block title %}Edit Facture{% endblock %}
+{% block title %}Modifier Facture{% endblock %}
 
 {% block body %}
     <div class="container-xl">
@@ -11,7 +11,7 @@
                     <div class="card">
                         {{ form_start(form) }}
                         <div class="card-body">
-                            <h3 class="card-title">Edit Facture</h3>
+                            <h3 class="card-title">Modifier Facture</h3>
                             <div class="row row-cards">
                                 <div class="col-sm-6 col-md-3">
                                     <div class="mb-3">
@@ -115,15 +115,16 @@
 
                                 </div>
                         </div>
-                        <div class="card-footer text-end">
-                            <button type="button" class="btn btn-primary" id="addLigne" data-collection-holder-class="tags">Add a ligne</button>
-                            <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                            <div class="card-footer d-flex justify-content-end align-items-center">
+                                <button class="btn btn-outline-green"><label class="form-check form-switch me-2 mb-0">{{ form_row(form.confirmed) }}</label></button>
+                                <button type="button" class="btn btn-primary me-2" id="addLigne" data-collection-holder-class="tags">Ajouter ligne</button>
+                                <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                            </div>
 
-                        </div>
 
 
 
-                        {{ form_end(form) }}
+                            {{ form_end(form) }}
                     </div>
                 </div>
             </div>
@@ -168,7 +169,7 @@
 
         function addTagFormDeleteLink(item) {
             const removeFormButton = document.createElement('button');
-            removeFormButton.innerText = 'Delete this Ligne';
+                removeFormButton.innerText = 'Supprimer ce ligne';
             removeFormButton.classList.add('btn', 'btn-danger'); // Adding Bootstrap classes for styling
 
             // Wrap the delete button in a div with class col-1

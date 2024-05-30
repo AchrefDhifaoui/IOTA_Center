@@ -28,6 +28,9 @@ class ParametreIota
     #[ORM\Column(length: 255)]
     private ?string $matriculeFiscale = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class ParametreIota
     public function setMatriculeFiscale(string $matriculeFiscale): static
     {
         $this->matriculeFiscale = $matriculeFiscale;
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): static
+    {
+        $this->logo = $logo;
 
         return $this;
     }

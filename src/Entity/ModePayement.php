@@ -24,9 +24,23 @@ class ModePayement
     #[ORM\OneToMany(targetEntity: Payement::class, mappedBy: 'modePayement')]
     private Collection $payements;
 
+    /**
+     * @var Collection<int, PayementFactureAchat>
+     */
+    #[ORM\OneToMany(targetEntity: PayementFactureAchat::class, mappedBy: 'modePayement')]
+    private Collection $payementFactureAchats;
+
+    /**
+     * @var Collection<int, PayementNoteHonoraire>
+     */
+    #[ORM\OneToMany(targetEntity: PayementNoteHonoraire::class, mappedBy: 'modePayement')]
+    private Collection $payementNoteHonoraires;
+
     public function __construct()
     {
         $this->payements = new ArrayCollection();
+        $this->payementFactureAchats = new ArrayCollection();
+        $this->payementNoteHonoraires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -79,6 +93,66 @@ class ModePayement
     public function __toString(): string
     {
         return $this->mode;
+    }
+
+    /**
+     * @return Collection<int, PayementFactureAchat>
+     */
+    public function getPayementFactureAchats(): Collection
+    {
+        return $this->payementFactureAchats;
+    }
+
+    public function addPayementFactureAchat(PayementFactureAchat $payementFactureAchat): static
+    {
+        if (!$this->payementFactureAchats->contains($payementFactureAchat)) {
+            $this->payementFactureAchats->add($payementFactureAchat);
+            $payementFactureAchat->setModePayement($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayementFactureAchat(PayementFactureAchat $payementFactureAchat): static
+    {
+        if ($this->payementFactureAchats->removeElement($payementFactureAchat)) {
+            // set the owning side to null (unless already changed)
+            if ($payementFactureAchat->getModePayement() === $this) {
+                $payementFactureAchat->setModePayement(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PayementNoteHonoraire>
+     */
+    public function getPayementNoteHonoraires(): Collection
+    {
+        return $this->payementNoteHonoraires;
+    }
+
+    public function addPayementNoteHonoraire(PayementNoteHonoraire $payementNoteHonoraire): static
+    {
+        if (!$this->payementNoteHonoraires->contains($payementNoteHonoraire)) {
+            $this->payementNoteHonoraires->add($payementNoteHonoraire);
+            $payementNoteHonoraire->setModePayement($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayementNoteHonoraire(PayementNoteHonoraire $payementNoteHonoraire): static
+    {
+        if ($this->payementNoteHonoraires->removeElement($payementNoteHonoraire)) {
+            // set the owning side to null (unless already changed)
+            if ($payementNoteHonoraire->getModePayement() === $this) {
+                $payementNoteHonoraire->setModePayement(null);
+            }
+        }
+
+        return $this;
     }
 
 }

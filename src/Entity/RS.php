@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RSRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RSRepository::class)]
@@ -15,6 +16,10 @@ class RS
 
     #[ORM\Column]
     private ?int $taux = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateApplication = null;
+
 
     public function getId(): ?int
     {
@@ -36,4 +41,18 @@ class RS
     {
         return $this->taux.'%';
     }
+
+    public function getDateApplication(): ?\DateTimeInterface
+    {
+        return $this->dateApplication;
+    }
+
+    public function setDateApplication(\DateTimeInterface $dateApplication): static
+    {
+        $this->dateApplication = $dateApplication;
+
+        return $this;
+    }
+
+
 }

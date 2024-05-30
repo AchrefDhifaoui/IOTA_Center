@@ -34,13 +34,14 @@ class FormateurType extends AbstractType
                 'label' => 'Adresse',
                 'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('cin', IntegerType::class, [
-                'attr' => ['class' => 'form-control'],
+            ->add('cin', TextType::class, [
+                'attr' => ['class' => 'form-control','name'=>'input-mask','data-mask'=>'0000 0000','data-mask-visible'=>'true','placeholder'=>'0000 0000','autocomplete'=>'off'],
                 'label' => 'CIN',
                 'label_attr' => ['class' => 'form-label'],
             ])
+//             name="input-mask" class="form-control" data-mask="(00) 0000-0000" data-mask-visible="true" placeholder="(00) 0000-0000"autocomplete="off"
             ->add('telephone', TextType::class, [
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-control','name'=>'input-mask','data-mask'=>'(+216) 00 000 000','data-mask-visible'=>'true','placeholder'=>'(+216) 00 000 000','autocomplete'=>'off'],
                 'label' => 'Telephone',
                 'label_attr' => ['class' => 'form-label'],
             ])

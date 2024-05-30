@@ -11,6 +11,7 @@ use App\Repository\TimbreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -49,7 +50,7 @@ class FactureType extends AbstractType
             ])
             ->add('client', EntityType::class, [
                 'class' => Client::class,
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-select'],
                 'label' => 'Client',
                 'label_attr' => ['class' => 'form-label'],
 
@@ -104,6 +105,12 @@ class FactureType extends AbstractType
                 'label_attr' => ['class' => 'form-label'],                // Add any other options you may need
             ]);
         }
+        if (!$options['exclude_isConfirmer_field']) {
+            $builder->add('confirmed', CheckboxType::class, [
+                'attr' => ['class' => 'form-check-input'],
+                               // Add any other options you may need
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -111,8 +118,10 @@ class FactureType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Facture::class,
             'exclude_etat_field' => false,
+            'exclude_isConfirmer_field' => false,
         ]);
         $resolver->setAllowedTypes('exclude_etat_field', 'bool');
+        $resolver->setAllowedTypes('exclude_isConfirmer_field', 'bool');
     }
     private function generateDefaultNumero(): string
     {
