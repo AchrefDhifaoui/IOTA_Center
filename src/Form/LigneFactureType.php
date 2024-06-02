@@ -24,20 +24,16 @@ class LigneFactureType extends AbstractType
             ->add('designation', EntityType::class, [
                 'class' => FormationAssurer::class,
                 'attr' => ['class' => 'form-control text-danger'],
-
                 'label_attr' => ['class' => 'form-label'],
-                'placeholder' => 'Choose a formation', // Add a placeholder
+                'placeholder' => 'Choisir une formation', // Add a placeholder
                 'required' => false,
 
             ])
             ->add('desManuel',TextType::class,[
-'empty_data'=>' ',
+                    'data'=>'--',
                     'attr' => ['class' => 'form-control'],
                     'label'=>'designation Manuel',
                     'label_attr' => ['class' => 'form-label'],
-
-
-
                 ]
             )
             ->add('quantite', IntegerType::class, [

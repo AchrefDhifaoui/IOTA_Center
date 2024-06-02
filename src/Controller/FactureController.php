@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Facture;
+use App\Entity\Payement;
 use App\Form\FactureType;
 use App\Form\PayementType;
 use App\Repository\FactureRepository;
@@ -64,10 +65,17 @@ class FactureController extends AbstractController
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            try {
             $entityManager->persist($facture);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+
+                // If an exception occurs during persist, add an error flash message
+                $this->addFlash('error', "Impossible d'ajouter cette facture: la formation assurer est deja utilisé dans autre facture");
+                return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
         $factures = $factureRepository->findAll();
         $facturePayments = [];
@@ -251,6 +259,7 @@ class FactureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            try {
             foreach ($originalTags as $ligne) {
                 if (false === $facture->getLigneFactures()->contains($ligne)) {
                     $entityManager->remove($ligne);
@@ -260,6 +269,10 @@ class FactureController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                // If an exception occurs during persist, add an error flash message
+                $this->addFlash('error', "Impossible de modifier cette facture: la formation assurer est deja utilisé dans autre facture");
+            }
         }
 
         return $this->render('facture/edit.html.twig', [
@@ -294,5 +307,23 @@ class FactureController extends AbstractController
         // Rediriger vers la liste des factures
         return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/payement/delete/{id}', name: 'payement_delete', methods: ['POST'])]
+    public function deleteP(Request $request, Payement $payement, EntityManagerInterface $entityManager): Response
+    {
+        // Get the associated facture before removing the payment
+        $facture = $payement->getFacture();
+
+        if ($this->isCsrfTokenValid('delete'.$payement->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($payement);
+            $entityManager->flush();
+
+            // Update the state of the facture after removing the payment
+            $this->updateFactureState($facture, $entityManager);
+
+        }
+
+        return $this->redirectToRoute('app_facture_index'); // Redirect to the list of factures or any other appropriate page
+    }
+
 
 }

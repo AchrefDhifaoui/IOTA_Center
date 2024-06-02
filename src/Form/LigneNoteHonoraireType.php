@@ -26,7 +26,7 @@ class LigneNoteHonoraireType extends AbstractType
                 'attr' => ['class' => 'form-control'],
 
                 'label_attr' => ['class' => 'form-label'],
-                'placeholder' => 'Choose a formation', // Add a placeholder
+                'placeholder' => 'Choisir une formation', // Add a placeholder
                 'required' => false,
 
             ])
