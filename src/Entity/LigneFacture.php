@@ -15,7 +15,7 @@ class LigneFacture
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(targetEntity: FormationAssurer::class)]
+    #[ORM\OneToOne(targetEntity: FormationAssurer::class, inversedBy: 'lignefacture')]
     #[ORM\JoinColumn(name: 'formation_assurer_id', referencedColumnName: 'id', nullable: true)]
     private ?FormationAssurer $designation = null;
 
