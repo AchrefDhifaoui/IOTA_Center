@@ -19,26 +19,14 @@
                 <div class="col">
                     <!-- Page pre-title -->
                     <div class="page-pretitle">
-                        Overview
+                        Apperçu
                     </div>
                     <h2 class="page-title">
-                        Dashboard
+                        Tableau de bord
                     </h2>
                 </div>
                 <!-- Page title actions -->
-                <div class="col-auto ms-auto d-print-none">
-                    <div class="btn-list">
-                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                            Créer un nouveau rapport
-                        </a>
-                        <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        </a>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
@@ -53,7 +41,7 @@
                                 <div class="subheader">Revenue    (paiement depuis facture de ventes)</div>
                             </div>
                             <div class="d-flex align-items-baseline">
-                                <div class="h1 mb-0 me-2">{{ TotalRevenu }} DT</div>
+                                <div class="h1 mb-0 me-2">{{ TotalRevenu|number_format(3,',',' ') }} DT</div>
                                 <div class="me-auto">
                                 </div>
                             </div>
@@ -66,17 +54,14 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="subheader">Dépense  (paiement des factures d'achat)</div>
-                                <div class="ms-auto lh-1">
-
-                                </div>
                             </div>
                             <div class="d-flex align-items-baseline">
-                                <div class="h1 mb-3 me-2">{{ TotalMontantFcatureAchat }} DT</div>
+                                <div class="h1 mb-0 me-2">{{ TotalMontantFcatureAchat|number_format(3,',',' ') }} DT</div>
                                 <div class="me-auto">
                                 </div>
                             </div>
-                            <div id="chart-new-clients" class="chart-sm"></div>
-                        </div>
+
+                        </div><div id="chart-new-clients" class="chart-sm"></div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-lg-4">
@@ -89,12 +74,12 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-baseline">
-                                <div class="h1 mb-3 me-2">{{ totalMontantNote }} DT</div>
+                                <div class="h1 mb-3 me-2">{{ totalMontantNote|number_format(3,',',' ') }} DT</div>
                                 <div class="me-auto">
                                 </div>
                             </div>
-                            <div id="chart-active-users" class="chart-sm"></div>
-                        </div>
+
+                        </div><div id="chart-active-users" class="chart-sm"></div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -109,7 +94,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="font-weight-medium">
-                                                Formation
+                                                <a href="{{ path('app_formation_index') }}">Formations</a>
                                             </div>
                                             <div class="text-muted">
                                                 {{ nbFormation }} formations
@@ -129,7 +114,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="font-weight-medium">
-                                                Formation à assurer
+                                                <a href="{{ path('app_formation_assurer_index') }}">Formations à assurer</a>
                                             </div>
                                             <div class="text-muted">
                                                 {{ nbFormationAssurer }} formation à assurer
@@ -149,7 +134,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="font-weight-medium">
-                                                Formateurs
+                                                <a href="{{ path('app_formateur_index') }}">Formateurs</a>
                                             </div>
                                             <div class="text-muted">
                                                 {{ nbFormateur }} formateur
@@ -169,7 +154,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="font-weight-medium">
-                                                Clients
+                                                <a href="{{ path('app_client_index') }}">Clients</a>
                                             </div>
                                             <div class="text-muted">
                                                 {{ nbClient }} client
@@ -184,7 +169,7 @@
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title">Chiffre d'affaire</h3>
+                            <h3 class="card-title">Chiffre d'affaires annuel</h3>
                             <div id="chart-mentions" class="chart-lg"></div>
                         </div>
                     </div>
@@ -192,7 +177,7 @@
                 <div class="col-lg-6">
                     <div class="card" style="height: 27rem">
                         <div class="card-body">
-                        <h3 class="card-title">les modes de paiement</h3>
+                        <h3 class="card-title">Les modes de paiement</h3>
 
                             <div id="chart-demo-pie"></div>
                         </div>
@@ -208,17 +193,22 @@
                                         <thead>
                                         <tr>
                                             <th>Formation</th>
-                                            <th>À Assurer</th>
+                                            <th>Nombre</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for formation in formations %}
+                                            {% if formation.formationAssurer|length >0 %}
                                             <tr>
                                                 <td>
                                                     {{ formation.titre }}
                                                 </td>
-                                                <td class="text-muted">{{ formation.formationAssurer|length }}</td>
-                                            </tr>
+                                                <td class="text-muted">
+
+                                                    {{ formation.formationAssurer|length }}
+
+                                                </td>
+                                            </tr>{% endif %}
                                         {% endfor %}
                                         </tbody>
                                     </table>
@@ -231,7 +221,7 @@
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header border-0">
-                            <div class="card-title">les dettes</div>
+                            <div class="card-title">Revenues non encaissés</div>
                         </div>
                         <div class="position-relative">
                             <div class="position-absolute top-0 left-0 px-3 mt-1 w-75">
@@ -240,21 +230,20 @@
                                         <div class="chart-sparkline chart-sparkline-square" id="sparkline-activity"></div>
                                     </div>
                                     <div class="col">
-                                        <div>Total des dettes: {{ totalDebt }} DT</div>
+                                        <div>Total : {{ totalDebt|number_format(3,',',' ') }} DT</div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="chart-development-activity"></div>
                         </div>
                         <div class="card-body card-body-scrollable card-body-scrollable-shadow">
-                            <div class="card-title">Les clients les plus endettés</div>
+                            <div class="card-title"></div>
                         <div class="card-table table-responsive">
                             <table class="table table-vcenter">
                                 <thead>
                                 <tr>
                                     <th>Client</th>
                                     <th>Nom</th>
-                                    <th>total dette</th>
+                                    <th>Total</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -314,7 +303,7 @@
                     curve: "smooth",
                 },
                 series: [{
-                    name: "Profits",
+                    name: "Montant: ",
                     data: [
                         {% for record in last30DaysMontant %}
                         {{ record.total_montant }},
@@ -346,10 +335,10 @@
                 },
                 labels: [
                     {% for record in last30DaysMontant %}
-                    '{{ record.date }}',
+                    '{{ record.date|date('d/M') }}',
                     {% endfor %}
                 ],
-                colors: [tabler.getColor("primary")],
+                colors: [tabler.getColor("success")],
                 legend: {
                     show: false,
                 },
@@ -362,7 +351,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             window.ApexCharts && (new ApexCharts(document.getElementById('chart-new-clients'), {
                 chart: {
-                    type: "line",
+                    type: "area",
                     fontFamily: 'inherit',
                     height: 40.0,
                     sparkline: {
@@ -372,16 +361,20 @@
                         enabled: true
                     },
                 },
+                dataLabels: {
+                    enabled: false,
+                },
                 fill: {
-                    opacity: 1,
+                    opacity: .16,
+                    type: 'solid'
                 },
                 stroke: {
-                    width: [2, 1],
-                    dashArray: [0, 3],
+                    width: 2,
                     lineCap: "round",
                     curve: "smooth",
                 },
                 series: [{
+                    name: "Montant: ",
                     data: [
                         {% for record in last30DaysMontantfactureAchat %}
                         {{ record.total_montant }},
@@ -401,6 +394,9 @@
                     tooltip: {
                         enabled: false
                     },
+                    axisBorder: {
+                        show: false,
+                    },
                     type: 'datetime',
                 },
                 yaxis: {
@@ -413,7 +409,8 @@
                     '{{ record.date }}',
                     {% endfor %}
                 ],
-                colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
+
+                colors: [tabler.getColor("danger")],
                 legend: {
                     show: false,
                 },
@@ -448,7 +445,7 @@
                     opacity: 1,
                 },
                 series: [{
-                    name: "Dépense",
+                    name: "Montant: ",
                     data: [{% for record in last30DaysMontantNote %}
                         {{ record.total_montant }},
                         {% endfor %}]
@@ -480,7 +477,7 @@
                     {% for record in last30DaysMontantNote %}
                     '{{ record.date }}',
                     {% endfor %}                ],
-                colors: [tabler.getColor("primary")],
+                colors: [tabler.getColor("danger")],
                 legend: {
                     show: false,
                 },
@@ -517,7 +514,7 @@
                     opacity: 1,
                 },
                 series: [{
-                    name: "CA",
+                    name: "C.A",
                     data: [
                         {% for month, amount in chiffreAffaireByMonth %}
                         {{ amount }},

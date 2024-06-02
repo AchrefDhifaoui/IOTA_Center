@@ -72,7 +72,7 @@ class FactureType extends AbstractType
             ])
             ->add('ligneFactures',CollectionType::class,[
                 'entry_type'=>LigneFactureType::class,
-                'entry_options'=>['label'=>false],
+                'label'=>false,
                 'allow_add'=>true,
                 'by_reference' => false,
                 'allow_delete' => true,
@@ -108,6 +108,7 @@ class FactureType extends AbstractType
         if (!$options['exclude_isConfirmer_field']) {
             $builder->add('confirmed', CheckboxType::class, [
                 'attr' => ['class' => 'form-check-input'],
+                               'required'=>false
                                // Add any other options you may need
             ]);
         }

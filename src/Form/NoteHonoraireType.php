@@ -53,7 +53,7 @@ class NoteHonoraireType extends AbstractType
             ])
             ->add('ligneNoteHonoraires',CollectionType::class,[
                 'entry_type'=>LigneNoteHonoraireType::class,
-                'entry_options'=>['label'=>false],
+                'label' => false,
                 'allow_add'=>true,
                 'by_reference' => false,
                 'allow_delete' => true,
