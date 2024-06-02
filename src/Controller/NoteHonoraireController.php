@@ -231,6 +231,7 @@ class NoteHonoraireController extends AbstractController
             }
             $entityManager->persist($noteHonoraire);
             $entityManager->flush();
+            $this->updateNoteState($noteHonoraire, $entityManager);
 
             return $this->redirectToRoute('app_note_honoraire_index', [], Response::HTTP_SEE_OTHER);
         }
