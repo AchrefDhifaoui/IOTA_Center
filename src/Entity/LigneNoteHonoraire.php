@@ -13,7 +13,7 @@ class LigneNoteHonoraire
     #[ORM\Column]
     public ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist'])]
+    #[ORM\OneToOne(cascade: ['persist'], inversedBy: 'ligneNoteHonoraire')]
     #[ORM\JoinColumn(nullable: false)]
     private ?FormationAssurer $designation = null;
 
