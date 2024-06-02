@@ -72,4 +72,10 @@ jobs:
           app-name: 'iotacenter'
           slot-name: 'Production'
           package: .
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          php bin/console doctrine:migrations:migrate --no-interaction
           
