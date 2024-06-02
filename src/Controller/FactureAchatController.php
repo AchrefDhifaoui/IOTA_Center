@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\FactureAchat;
+use App\Entity\PayementFactureAchat;
 use App\Form\FactureAchatType;
 use App\Form\PayementAchatType;
 use App\Repository\FactureAchatRepository;
@@ -242,5 +243,22 @@ class FactureAchatController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_facture_achat_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/payementFactureAchat/delete/{id}', name: 'payementFactureAchat_delete', methods: ['POST'])]
+    public function deleteP(Request $request, PayementFactureAchat $payement, EntityManagerInterface $entityManager): Response
+    {
+        // Get the associated facture before removing the payment
+        $facture = $payement->getFactureAchat();
+
+        if ($this->isCsrfTokenValid('delete'.$payement->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($payement);
+            $entityManager->flush();
+
+            // Update the state of the facture after removing the payment
+            $this->updateFactureState($facture, $entityManager);
+
+        }
+
+        return $this->redirectToRoute('app_facture_achat_index'); // Redirect to the list of factures or any other appropriate page
     }
 }

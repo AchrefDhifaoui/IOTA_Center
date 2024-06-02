@@ -89,7 +89,7 @@
                         </div>
                         <div class="card-footer text-end">
                             <button type="button" class="btn btn-primary" id="addLigne" data-collection-holder-class="tags">Ajouter un ligne</button>
-                            <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ button_label|default('Valider') }}</button>
 
                         </div>
                         <script>
@@ -225,7 +225,7 @@
 
         function addTagFormDeleteLink(item) {
             const removeFormButton = document.createElement('button');
-            removeFormButton.innerText = 'Supprimer ce ligne';
+            removeFormButton.innerText = 'Supprimer';
             removeFormButton.classList.add('btn', 'btn-danger'); // Adding Bootstrap classes for styling
 
             // Wrap the delete button in a div with class col-1

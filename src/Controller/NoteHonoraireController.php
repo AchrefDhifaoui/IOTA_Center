@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\LigneNoteHonoraire;
 use App\Entity\NoteHonoraire;
 use App\Entity\ParametreIota;
+use App\Entity\PayementNoteHonoraire;
 use App\Form\NoteHonoraireType;
 use App\Form\PayementNoteHonoraireType;
 use App\Repository\NoteHonoraireRepository;
@@ -74,12 +75,22 @@ class NoteHonoraireController extends AbstractController
             }
             $noteHonoraireTotals[$nh->getId()] = $netTotal;
         }
+        $notes = $noteHonoraireRepository->findAll();
+        $NotePayments = [];
+        foreach ($notes as $note) {
+            $totalPaymentAmount = 0;
+            foreach ($note->getPayementNoteHonoraires() as $payment) {
+                $totalPaymentAmount += $payment->getMontant();
+            }
+            $NotePayments[$note->getId()] = $totalPaymentAmount;
+        }
 
         return $this->render('note_honoraire/index.html.twig', [
             'note_honoraires' => $noteHonoraires,
             'form' => $form,
             'noteHonoraireTotals' => $noteHonoraireTotals,
             'paymentForm' => $paymentForm->createView(),
+            'notePayements'=>$NotePayments
         ]);
     }
     private function updateNoteState(NoteHonoraire $note, EntityManagerInterface $entityManager): void
@@ -238,5 +249,22 @@ class NoteHonoraireController extends AbstractController
         $manager->flush();
 
         return $this->redirectToRoute('app_note_honoraire_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/payementNote/delete/{id}', name: 'payementNote_delete', methods: ['POST'])]
+    public function deleteP(Request $request, PayementNoteHonoraire $payement, EntityManagerInterface $entityManager): Response
+    {
+        // Get the associated facture before removing the payment
+        $facture = $payement->getNote();
+
+        if ($this->isCsrfTokenValid('delete'.$payement->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($payement);
+            $entityManager->flush();
+
+            // Update the state of the facture after removing the payment
+            $this->updateNoteState($facture, $entityManager);
+
+        }
+
+        return $this->redirectToRoute('app_note_honoraire_index'); // Redirect to the list of factures or any other appropriate page
     }
 }

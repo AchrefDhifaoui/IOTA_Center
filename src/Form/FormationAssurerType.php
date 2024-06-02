@@ -39,11 +39,13 @@ class FormationAssurerType extends AbstractType
             ->add('puFormation', NumberType::class, [
                 'attr' => ['class' => 'form-control'],
                 'label' => 'PU',
+                'scale' => 3,
+                'html5' => true,
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('formation', EntityType::class, [
                 'class' => Formation::class,
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-select'],
                 'label' => 'Formation',
                 'label_attr' => ['class' => 'form-label'],
                 'placeholder' => 'Choisir la formation',

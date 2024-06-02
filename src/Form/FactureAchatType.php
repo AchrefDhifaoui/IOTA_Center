@@ -43,7 +43,7 @@ class FactureAchatType extends AbstractType
             ])
             ->add('TotalTTC', null, [
                 'attr' => ['class' => 'form-control'],
-                'label' => 'TotalTTC',
+                'label' => 'Total TTC',
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('pieceJointe', FileType::class, [
