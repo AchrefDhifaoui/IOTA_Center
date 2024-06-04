@@ -29,7 +29,7 @@ class ClientType extends AbstractType
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('telephone', TextType::class, [
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-control','name'=>'input-mask','data-mask'=>'00000000','data-mask-visible'=>'true','placeholder'=>'00000000','autocomplete'=>'off'],
                 'label' => 'Telephone',
                 'label_attr' => ['class' => 'form-label'],
             ])

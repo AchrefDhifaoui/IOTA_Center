@@ -1,5 +1,7 @@
 <?php
 
+// src/Entity/LigneFacture.php
+
 namespace App\Entity;
 
 use App\Repository\LigneFactureRepository;
@@ -13,7 +15,8 @@ class LigneFacture
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist'])]
+    #[ORM\OneToOne(targetEntity: FormationAssurer::class, inversedBy: 'lignefacture')]
+    #[ORM\JoinColumn(name: 'formation_assurer_id', referencedColumnName: 'id', nullable: true)]
     private ?FormationAssurer $designation = null;
 
     #[ORM\Column]

@@ -7,9 +7,9 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <h2 class="page-title">
-                        Formateur
+                        Formateurs
                     </h2>
-                    <div class="text-muted mt-1">{{ numberOfFormateurs }} Formateur</div>
+                    <div class="text-muted mt-1">{{ numberOfFormateurs }} Formateurs</div>
                 </div>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
@@ -18,7 +18,7 @@
                         <form method="get" action="{{ path('app_formateur_index') }}">
                                 <div class="d-flex">
                                     <div class="ms-2 d-inline-block">
-                                        <input type="text" class="form-control" name="searchTerm" placeholder="Search for…" style="height: 36px">
+                                        <input type="text" class="form-control" name="searchTerm" placeholder="Recherche pour…" style="height: 36px">
                                     </div>
                                     <div class="col-auto">
                                         <button class="btn btn-icon" aria-label="Button" type="submit">
@@ -34,8 +34,7 @@
                         <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-Formateur">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                            New Formateur
-                        </a>
+                            Nouveau Formateur                        </a>
                         </div>
 
                     </div>
@@ -59,9 +58,9 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                             </a>
                             <div class="dropdown-menu dropdown-menu-start">
-                                <a href="{{ path('app_formateur_show',{'id':formateur.id}) }}" class="dropdown-item">view</a>
-                                <a href="{{ path('app_formateur_edit',{'id':formateur.id}) }}"  class="dropdown-item">edit</a>
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger{{ formateur.id }}" class="dropdown-item text-danger">Delete</a>
+                                <a href="{{ path('app_formateur_show',{'id':formateur.id}) }}" class="dropdown-item">Voir</a>
+                                <a href="{{ path('app_formateur_edit',{'id':formateur.id}) }}"  class="dropdown-item">Modifier</a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger{{ formateur.id }}" class="dropdown-item text-danger">Supprimer</a>
                             </div>
                         </div>
                         </div>
@@ -79,7 +78,7 @@
                                 Email</a>
                             <a href="tel:{{ formateur.telephone}}" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/phone -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /></svg>
-                                Call</a>
+                                Appeler</a>
                         </div>
                     </div>
 
@@ -92,17 +91,17 @@
                                 <div class="modal-body text-center py-4">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
-                                    <h3>Are you sure?</h3>
-                                    <div class="text-muted">Do you really want to remove {{ formateur.nom }} with id : {{ formateur.id }}</div>
+                                    <h3>Êtes-vous sûre?</h3>
+                                    <div class="text-muted">Voulez-vous vraiment supprimer {{ formateur.nom }} avec l'identifiant: {{ formateur.id }}</div>
                                 </div>
                                 <div class="modal-footer">
                                     <div class="w-100">
                                         <div class="row">
                                             <div class="col"><a href="" class="btn w-100" data-bs-dismiss="modal">
-                                                    Cancel
+                                                    Annuler
                                                 </a></div>
                                             <div class="col" data-bs-dismiss="modal">
-                                                <a href="{{ path('app_formateur_delete',{id:formateur.id}) }}" class="btn btn-danger w-100"> Delete this formateur </a>
+                                                <a href="{{ path('app_formateur_delete',{id:formateur.id}) }}" class="btn btn-danger w-100"> Supprimer </a>
                                             </div>
                                         </div>
                                     </div>
@@ -159,7 +158,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">New Formateur</h5>
+                    <h5 class="modal-title">Nouveau Formateur</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -203,12 +202,12 @@
                 </div>
                 <div class="modal-footer">
                     <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                        Cancel
+                        Annuler
                     </a>
                     <button type="submit" class="btn btn-primary ms-auto" >
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        {{ button_label|default('Save') }}
+                        {{ button_label|default('Valider') }}
                     </button>
                 </div>
             </div>

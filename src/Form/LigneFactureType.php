@@ -10,6 +10,7 @@ use Doctrine\DBAL\Types\StringType;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,37 +23,35 @@ class LigneFactureType extends AbstractType
         $builder
             ->add('designation', EntityType::class, [
                 'class' => FormationAssurer::class,
-                'attr' => ['class' => 'form-control'],
-
+                'attr' => ['class' => 'form-control text-danger'],
                 'label_attr' => ['class' => 'form-label'],
-                'placeholder' => 'Choose a formation', // Add a placeholder
+                'placeholder' => 'Choisir une formation', // Add a placeholder
                 'required' => false,
 
             ])
             ->add('desManuel',TextType::class,[
-'data'=>'--',
+                    'data'=>'--',
                     'attr' => ['class' => 'form-control'],
                     'label'=>'designation Manuel',
                     'label_attr' => ['class' => 'form-label'],
-
-
-
                 ]
             )
-            ->add('quantite', null, [
+            ->add('quantite', IntegerType::class, [
                 'attr' => ['class' => 'form-control'],
                 'label' => 'quantité',
                 'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('prixUnitaire', null, [
+            ->add('prixUnitaire', NumberType::class, [
                 'attr' => ['class' => 'form-control'],
                 'label' => 'PU',
+                'scale' => 3,
+                'html5' => true,
                 'label_attr' => ['class' => 'form-label'],
             ])
             ->add('Unite', EntityType::class, [
                 'class' => Unite::class,
                 'choice_label' => 'titre',
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-select'],
                 'label' => 'Unite',
                 'label_attr' => ['class' => 'form-label'],
             ])

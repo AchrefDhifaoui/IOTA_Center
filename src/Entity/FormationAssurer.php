@@ -41,6 +41,10 @@ class FormationAssurer
 
     #[ORM\Column]
     private ?float $puFormation = null;
+    #[ORM\OneToOne(mappedBy: 'designation', cascade: ['persist', 'remove'])]
+    private ?LigneNoteHonoraire $ligneNoteHonoraire = null;
+    #[ORM\OneToOne(mappedBy: 'designation', cascade: ['persist', 'remove'])]
+    private ?LigneFacture $lignefacture = null;
 
     public function getId(): ?int
     {
@@ -98,7 +102,38 @@ class FormationAssurer
         return $this;
     }
 
+    public function getLigneNoteHonoraire(): ?LigneNoteHonoraire
+    {
+        return $this->ligneNoteHonoraire;
+    }
 
+    public function setLigneNoteHonoraire(?LigneNoteHonoraire $ligneNoteHonoraire): static
+    {
+        // set the owning side of the relation if necessary
+        if ($ligneNoteHonoraire->getDesignation() !== $this) {
+            $ligneNoteHonoraire->setDesignation($this);
+        }
+
+        $this->ligneNoteHonoraire = $ligneNoteHonoraire;
+
+        return $this;
+    }
+    public function getLigneFacture(): ?LigneFacture
+    {
+        return $this->lignefacture;
+    }
+
+    public function setLigneFacture(?LigneFacture $lignefacture): static
+    {
+        // set the owning side of the relation if necessary
+        if ($lignefacture->getDesignation() !== $this) {
+            $lignefacture->setDesignation($this);
+        }
+
+        $this->lignefacture = $lignefacture;
+
+        return $this;
+    }
 
 
 
@@ -109,7 +144,7 @@ class FormationAssurer
     {
         $dateString = $this->dateDebut ? $this->dateDebut->format('Y-m-d') : 'No Date';
 
-        return $this->formation->getTitre() . ' (' . $dateString . ')';
+        return $this->getClient() . ' - ' . $this->formation->getTitre() . ' (' . $dateString . ')';
     }
 
 

@@ -17,12 +17,12 @@
     <div class="page-body">
         <div class="container-xl">
             <div class="row row-cards">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="row row-cards">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">les informations de client</h3>
+                                    <h3 class="card-title">Les informations du client</h3>
                                 </div>
                                 <div class="card-status-start bg-primary"></div>
                                     <div class="row">
@@ -45,7 +45,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Liste des formations assurer</h3>
+                                    <h3 class="card-title">Liste des formations à assurer</h3>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table card-table table-vcenter text-nowrap datatable" >
@@ -56,9 +56,7 @@
                                             <th>Titre</th>
                                             <th>Formateur</th>
                                             <th>date debut</th>
-                                            <th>quantite</th>
-                                            <th>Prix Unitaire</th>
-
+                                            <th>Nb</th>
                                             <th></th>
                                         </tr>
                                         </thead>
@@ -87,8 +85,6 @@
 
 
                                                 <td>{{ formation.quantite }}</td>
-                                                <td>{{ formation.puFormation }}</td>
-
 
                                             </tr>
 
@@ -110,7 +106,7 @@
 
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="row row-cards">
 
                         <div class="col-12">
@@ -128,10 +124,8 @@
                                             <th>date</th>
                                             <th>Etat</th>
                                             <th>TotalTTC</th>
-                                            <th>RS_piece join</th>
-
-                                            <th></th>
-                                        </tr>
+                                            <th>R.S (Piece jointe)</th>
+                                       </tr>
                                         </thead>
                                         <tbody>
                                         {% for facture in factures %}

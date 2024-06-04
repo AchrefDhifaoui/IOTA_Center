@@ -45,4 +45,64 @@ class FactureRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function getTotalDebt(): float
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->select('SUM(f.Total_TTC) as totalDebt')
+            ->where('f.etat = :etat')
+            ->setParameter('etat', Facture::ETAT_NON_PAYE);
+
+        return (float) $qb->getQuery()->getSingleScalarResult();
+    }
+    public function getDebtEvolutionLast30Days(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "
+            SELECT 
+                DATE(f.date_facture) as date,
+                SUM(f.Total_TTC) as totalDebt
+            FROM 
+                facture f
+            WHERE 
+                f.etat = :etat
+            GROUP BY 
+                DATE(f.date_facture)
+            ORDER BY 
+                DATE(f.date_facture) DESC
+            LIMIT 30
+        ";
+
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery(['etat' => Facture::ETAT_NON_PAYE]);
+
+        return $resultSet->fetchAllAssociative();
+    }
+    public function getClientsWithUnpaidInvoices(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "
+            SELECT 
+                c.id AS client_id, 
+                c.nom AS client_name, 
+                c.image AS client_image,
+                SUM(f.Total_TTC) AS total_debt
+            FROM 
+                facture f
+            JOIN 
+                client c ON f.client_id = c.id
+            WHERE 
+                f.etat = :etat
+            GROUP BY 
+                c.id, c.nom, c.image
+            ORDER BY 
+                total_debt DESC
+        ";
+
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery(['etat' => Facture::ETAT_NON_PAYE]);
+
+        return $resultSet->fetchAllAssociative();
+    }
 }

@@ -10,6 +10,7 @@ parameters:
     facture_directory: '%kernel.project_dir%/public/uploads/facture-RS_pdf'
     fournisseur_directory: '%kernel.project_dir%/public/uploads/fournisseur-image'
     factureAchat_directory: '%kernel.project_dir%/public/uploads/factureAchat-pdf'
+    iota_directory: '%kernel.project_dir%/public/uploads/iota-logo'
 
 services:
     # default configuration for services in *this* file
