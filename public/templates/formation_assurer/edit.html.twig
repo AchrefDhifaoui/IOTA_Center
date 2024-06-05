@@ -1,0 +1,60 @@
+{% extends '../template.html.twig' %}
+
+{% block title %}Edit FormationAssurer{% endblock %}
+
+{% block body %}
+    <div class="container-xl">
+        <div class="card" style="margin: 17px; height: 75px ">
+
+            <div class="row row-cards">
+                <div class="col-12">
+                    <div class="card">
+                        {{ form_start(form) }}
+                        <div class="card-body">
+                            <h3 class="card-title">Modifier Formation</h3>
+                            <div class="row row-cards">
+                                <div class="row mb-3 align-items-end">
+                                    <div class="col">
+                                        {{ form_row(form.formation) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.formateur) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.dateDebut) }}
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div class="row mb-3 align-items-end">
+
+                                    <div class="col">
+                                        {{ form_row(form.quantite) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.puFormation) }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form_row(form.unite) }}
+                                    </div>
+
+                                </div>
+
+                                <div class="row mb-3 align-items-end">
+                                    <div class="col">
+                                        {{ form_row(form.client) }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="submit" class="btn btn-primary">{{ button_label|default('Valider') }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

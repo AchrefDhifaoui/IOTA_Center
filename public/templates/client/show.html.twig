@@ -1,0 +1,280 @@
+{% extends '../template.html.twig' %}
+
+{% block title %}Client{% endblock %}
+
+{% block body %}
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <h2 class="page-title">
+                        Client details
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row row-cards">
+                <div class="col-md-5">
+                    <div class="row row-cards">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Les informations du client</h3>
+                                </div>
+                                <div class="card-status-start bg-primary"></div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <!-- Photo -->
+                                            <img src="{{ asset('uploads/client-image/') }}{{ client.image }}" class="w-100 h-100 object-cover card-img-start" style="padding: 10px"/>
+                                        </div>
+                                        <div class="col" >
+                                            <div class="card-body" >
+                                                <h3 class="card-title">{{ client.nom }}</h3>
+                                                <p class="text-muted"> <strong>Email : </strong> {{ client.email }}</p>
+                                                <p class="text-muted"> <strong>Tel : </strong> {{ client.telephone }}</p>
+                                                <p class="text-muted"> <strong>Adresse : </strong> {{ client.adresse }}</p>
+                                                <p class="text-muted"> <strong>MF : </strong>  {{ client.matriculeFiscale }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Liste des formations à assurer</h3>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table card-table table-vcenter text-nowrap datatable" >
+                                        <thead>
+                                        <tr>
+
+
+                                            <th>Titre</th>
+                                            <th>Formateur</th>
+                                            <th>date debut</th>
+                                            <th>Nb</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for formation in formation_assurers %}
+                                            <tr>
+
+
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">{{ formation.formation.titre }}</div>
+                                                            <div class="text-muted" >{{ formation.formation.domaine.titre }}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {{ formation.formateur.nom }}   {{ formation.formateur.prenom }}
+                                                </td>
+
+
+
+                                                <td>
+                                                    {{ formation.dateDebut | date('Y-m-d')}}
+                                                </td>
+
+
+                                                <td>{{ formation.quantite }}</td>
+
+                                            </tr>
+
+
+
+
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="9">no records found</td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="row row-cards">
+
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Liste des factures </h3>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table card-table table-vcenter text-nowrap datatable" >
+                                        <thead>
+                                        <tr>
+
+
+                                            <th>Numero</th>
+                                            <th>date</th>
+                                            <th>Etat</th>
+                                            <th>TotalTTC</th>
+                                            <th>R.S (Piece jointe)</th>
+                                       </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for facture in factures %}
+                                            <tr>
+
+
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">{{ facture.numero }}</div>
+
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+
+                                                <td>
+                                                    {{ facture.dateFacture | date('Y-m-d') }}
+
+                                                </td>
+                                                <td>
+
+                                                    {% if facture.etat=="Non payé" %}
+                                                        <span class="badge bg-warning me-1"></span> Non payé
+                                                    {% elseif facture.etat=="payé" %}
+                                                        <span class="badge bg-success me-1"></span> payé
+                                                    {% else %}
+                                                        <span class="badge bg-success me-1"></span> partiellement payé
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {{ facture.totalTTC }} DT
+
+                                                </td>
+                                                {% if facture.pieceJoinRS %}
+                                                    <td>
+                                                        <svg style="cursor: pointer" id="openPdfIcon{{ facture.id }}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3bb058" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                        </svg>
+                                                    </td>
+                                                    <script>
+                                                        document.getElementById('openPdfIcon{{ facture.id }}').addEventListener('click', function() {
+                                                            window.open("{{ asset('uploads/facture-RS_pdf/')}}{{ facture.pieceJoinRS }}", '_blank');
+                                                        });
+                                                    </script>
+
+                                                {% else %}
+                                                    <td>
+                                                        <form method="post" enctype="multipart/form-data" action="{{ path('ajouter_piece_jointe', {'id': facture.id}) }}">
+                                                            <input type="file" name="pieceJointePDF" id="inputPieceJointe" style="display: none;">
+                                                            <label for="inputPieceJointe" style="cursor: pointer">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f10404" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-upload">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                                                    <path d="M12 11v6" />
+                                                                    <path d="M9.5 13.5l2.5 -2.5l2.5 2.5" />
+                                                                </svg>
+                                                            </label>
+                                                            <span id="nomFichierSelectionne"></span>
+                                                            <button type="submit" class="btn btn-success" style="display: none;">Télécharger</button>
+                                                        </form>
+
+
+                                                        <script>
+                                                            document.getElementById('inputPieceJointe').addEventListener('change', function() {
+                                                                var nomFichier = this.files[0].name;
+                                                                document.getElementById('nomFichierSelectionne').textContent = nomFichier;
+                                                                document.querySelector('button[type="submit"]').style.display = 'inline-block';
+                                                            });
+
+                                                        </script>
+
+                                                    </td>
+                                                {% endif %}
+
+
+
+
+
+
+                                                <td class="text-end">
+                                                    <a href="{{ path('app_facture_show',{'id':facture.id}) }}">
+                                                        <button class="btn btn-warning" data-bs-boundary="viewport" >
+                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
+                                                            Print</button>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+
+
+
+
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="9">no records found</td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{#<div class="card " >#}
+{#    <div class="card-status-start bg-primary"></div>#}
+{#    <div class="row">#}
+{#        <div class="col-3">#}
+{#            <!-- Photo -->#}
+{#            <img src="{{ asset('uploads/client-image/') }}{{ client.image }}" class="w-100 h-100 object-cover card-img-start" style="padding: 10px"/>#}
+{#        </div>#}
+{#        <div class="col" >#}
+{#            <div class="card-body" >#}
+{#                <h3 class="card-title">{{ client.nom }}</h3>#}
+{#                <p class="text-muted"> <strong>Email : </strong> {{ client.email }}</p>#}
+{#                <p class="text-muted"> <strong>Tel : </strong> {{ client.telephone }}</p>#}
+{#                <p class="text-muted"> <strong>Adresse : </strong> {{ client.adresse }}</p>#}
+{#                <p class="text-muted"> <strong>MF : </strong>  {{ client.matriculeFiscale }}</p>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#                {% for formationAssurer in formations %}#}
+{#                    <li>#}
+{#                        Formation: {{ formationAssurer.formation.titre }}<br>#}
+{#                        Date Début: {{ formationAssurer.dateDebut ? formationAssurer.dateDebut|date('Y-m-d') : 'No Date' }}<br>#}
+{#                        Quantité: {{ formationAssurer.quantite }}<br>#}
+{#                        Formateur: {{ formationAssurer.formateur.nom }}<br>#}
+{#                        Unite: {{ formationAssurer.unite.titre }}<br>#}
+{#                        PU Formation: {{ formationAssurer.puFormation }}#}
+{#                    </li>#}
+{#                {% else %}#}
+{#                    <li>No formations found for this client.</li>#}
+{#                {% endfor %}#}
+
+{#                {% for facture in factures %}#}
+{#                    <li>#}
+{#                        Description: {{ facture.numero }}<br>#}
+{#                    </li>#}
+{#                {% else %}#}
+{#                    <li>No factures found for this client.</li>#}
+{#                {% endfor %}#}

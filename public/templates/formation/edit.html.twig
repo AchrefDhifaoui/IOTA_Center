@@ -1,0 +1,96 @@
+{% extends '../template.html.twig' %}
+
+{% block title %}Edit formation{% endblock %}
+
+{% block body %}
+    <div class="container-xl">
+    <div class="card" style="margin: 17px; height: 75px ">
+
+        <div class="row row-cards">
+            <div class="col-12">
+                <div class="card">
+                    {{ form_start(form) }}
+                    <div class="card-body">
+                        <h3 class="card-title">Modifier Formation</h3>
+                        <div class="row row-cards">
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    {{ form_row(form.image) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="mb-3">
+                                    {{ form_row(form.titre) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="mb-3">
+                                    {{ form_row(form.domaine) }}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    {{ form_row(form.detail) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="mb-3">
+                                   {{ form_row(form.contenu) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="mb-3">
+                                    {{ form_row(form.objectifs) }}
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-sm-6 col-md-3">
+                                <div class="mb-3">
+                                    {{ form_row(form.prix) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="mb-3">
+                                    {{ form_row(form.duree) }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <label class="form-label">Mode</label>
+                                <div class="form-selectgroup">
+
+                                    {% for mode in form.mode %}
+                                        <label class="form-selectgroup-item">
+
+                                            <span class="form-selectgroup-label">{{ form_widget(mode) }}  {{ mode.vars.label }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-primary">{{ button_label|default('Valider') }}</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+{#    <h1>Edit Formation</h1>#}
+
+{#    {{ include('formation/_form.html.twig', {'button_label': 'Update'}) }}#}
+
+{#    <a href="{{ path('app_formation_index') }}">back to list</a>#}
+
+{#    {{ include('formation/_delete_form.html.twig') }}#}
+{% endblock %}

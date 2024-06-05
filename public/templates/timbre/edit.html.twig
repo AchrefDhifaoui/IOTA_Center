@@ -1,0 +1,13 @@
+{% extends '../base.html.twig' %}
+
+{% block title %}Edit Timbre{% endblock %}
+
+{% block body %}
+    <h1>Edit Timbre</h1>
+
+    {{ include('timbre/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_timbre_index') }}">back to list</a>
+
+    {{ include('timbre/_delete_form.html.twig') }}
+{% endblock %}

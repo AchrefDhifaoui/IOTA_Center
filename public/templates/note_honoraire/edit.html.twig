@@ -1,0 +1,249 @@
+{% extends '../template.html.twig' %}
+
+{% block title %}Edit NoteHonoraire{% endblock %}
+
+{% block body %}
+    <div class="container-xl">
+        <div class="card" style="margin: 17px; height: 75px ">
+
+            <div class="row row-cards">
+                <div class="col-12">
+                    <div class="card">
+                        {{ form_start(form) }}
+                        <div class="card-body">
+                            <h3 class="card-title">Modifier Note d'honoraire</h3>
+                            <div class="row row-cards">
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-3">
+                                        {{ form_row(form.formateur) }}
+                                    </div>
+                                </div>
+{#                                <div class="col-sm-6 col-md-3">#}
+{#                                    <div class="mb-3">#}
+{#                                        {{ form_row(form.client) }}#}
+{#                                    </div>#}
+{#                                </div>#}
+                                <div class="col-sm-6 col-md-2">
+                                    <div class="mb-3">
+                                        {{ form_row(form.date) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-2">
+                                    <div class="mb-2">
+                                        {{ form_row(form.numero) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="mb-2">
+                                        {{ form_row(form.etat) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-2">
+                                    <div class="mb-2">
+                                        {{ form_row(form.RS) }}
+                                    </div>
+                                </div>
+
+
+                                {% for ligne in form.ligneNoteHonoraires %}
+                                <div class="container-xl" >
+                                <div class="card" id="ligne" style="margin: 15px;padding: 15px">
+                                    <div class="row row-cards">
+                                    <div class="col-sm-5 col-md-3">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.designation) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 col-md-2">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.qantite) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5 col-md-2">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.prixUnitaire) }}
+                                        </div>
+                                    </div>
+                                        <div class="col-sm-5 col-md-2">
+                                            <div class="mb-2">
+                                                {{ form_row(ligne.unite) }}
+                                            </div>
+                                        </div>
+                                    <div class="col-sm-5 col-md-3">
+                                        <div class="mb-2">
+                                            {{ form_row(ligne.prixTotalHT) }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                                </div>
+                                </div>
+                                {% endfor %}
+                                <div class="tags"
+                                     data-index="{{ form.ligneNoteHonoraires|length > 0 ? form.ligneNoteHonoraires|last.vars.name + 1 : 0 }}"
+                                     data-prototype="{{ form_widget(form.ligneNoteHonoraires.vars.prototype)|e('html_attr') }}"
+                                ></div>
+
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <button type="button" class="btn btn-primary" id="addLigne" data-collection-holder-class="tags">Ajouter un ligne</button>
+                            <button type="submit" class="btn btn-primary">{{ button_label|default('Valider') }}</button>
+
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                function updatePrixTotalHT(element) {
+                                    var ligneContainer = element.closest('.row');
+                                    var prixUnitaireField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixUnitaire"]');
+                                    var quantiteField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_qantite"]');
+                                    var prixTotalHTField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixTotalHT"]');
+                                    if (!prixUnitaireField || !quantiteField || !prixTotalHTField) {
+                                        return;
+                                    }
+                                    var prixUnitaire = parseFloat(prixUnitaireField.value);
+                                    var quantite = parseInt(quantiteField.value);
+                                    var prixTotalHT = prixUnitaire * quantite;
+                                    prixTotalHTField.value = prixTotalHT.toFixed(2);
+                                }
+                                function handleInput(event) {
+                                    var target = event.target;
+                                    if (target.id.includes('_prixUnitaire') || target.id.includes('_qantite')) {
+                                        updatePrixTotalHT(target);
+                                    }
+                                }
+                                document.addEventListener('input', handleInput);
+                            });
+
+
+
+
+                        </script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                function updatePrixUnitaireAndQuantite(element) {
+                                    var ligneContainer = element.closest('.row');
+                                    var selectedFormationId = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_designation"]').value;
+                                    var prixUnitaireField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixUnitaire"]');
+                                    var quantiteField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_qantite"]');
+                                    if (!prixUnitaireField || !quantiteField) {
+                                        return;
+                                    }
+                                    // Make an AJAX request to fetch prixUnitaire and quantite for the selected FormationAssurer
+                                    var url = '{{ path('fetch_formation_assurer_details', {'id': '__id__'}) }}';
+                                    url = url.replace('__id__', selectedFormationId);
+
+                                    fetch(url)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Update quantite and prixUnitaire fields with fetched values
+                                            quantiteField.value = data.quantite;
+                                            prixUnitaireField.value = data.prixUnitaire;
+
+                                            // Calculate and update prixTotalHT
+                                            updatePrixTotalHT(ligneContainer);
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                }
+
+                                function handleSelectChange(event) {
+                                    var target = event.target;
+                                    if (target.id.includes('_designation')) {
+                                        updatePrixUnitaireAndQuantite(target);
+                                    }
+                                }
+
+                                function updatePrixTotalHT(ligneContainer) {
+                                    var prixUnitaireField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixUnitaire"]');
+                                    var quantiteField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_qantite"]');
+                                    var prixTotalHTField = ligneContainer.querySelector('[id^="note_honoraire_ligneNoteHonoraires_"][id$="_prixTotalHT"]');
+                                    if (!prixUnitaireField || !quantiteField || !prixTotalHTField) {
+                                        return;
+                                    }
+                                    var prixUnitaire = parseFloat(prixUnitaireField.value);
+                                    var quantite = parseInt(quantiteField.value);
+                                    var prixTotalHT = prixUnitaire * quantite;
+                                    prixTotalHTField.value = prixTotalHT.toFixed(2);
+                                }
+
+                                function handleInput(event) {
+                                    var target = event.target;
+                                    if (target.id.includes('_prixUnitaire') || target.id.includes('_qantite')) {
+                                        updatePrixTotalHT(target.closest('.row'));
+                                    }
+                                }
+
+                                document.addEventListener('change', handleSelectChange);
+                                document.addEventListener('input', handleInput);
+                            });
+                        </script>
+
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document
+            .querySelectorAll('#addLigne')
+            .forEach(btn => {
+                btn.addEventListener("click", addFormToCollection)
+            });
+        document
+            .querySelectorAll('div#ligne ')
+            .forEach((tag) => {
+                addTagFormDeleteLink(tag)
+            })
+
+        function addFormToCollection(e) {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('div');
+            item.className="card";
+            item.style.padding="15px"
+            item.style.margin="15px"
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+            item.querySelector('div').classList.add('row', 'mb-3', 'align-items-end');
+            item.querySelectorAll('div > div').forEach(col => {
+                col.classList.add('col');
+            });
+
+            collectionHolder.appendChild(item);
+
+            collectionHolder.dataset.index++;
+            addTagFormDeleteLink(item);
+        }
+
+        function addTagFormDeleteLink(item) {
+            const removeFormButton = document.createElement('button');
+            removeFormButton.innerText = 'Supprimer';
+            removeFormButton.classList.add('btn', 'btn-danger'); // Adding Bootstrap classes for styling
+
+            // Wrap the delete button in a div with class col-1
+            const deleteWrapper = document.createElement('div');
+            deleteWrapper.appendChild(removeFormButton);
+            item.appendChild(deleteWrapper);
+
+            removeFormButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                // remove the div for the tag form
+                item.remove();
+            });
+        }
+    </script>
+
+
+
+
+
+
+{% endblock %}

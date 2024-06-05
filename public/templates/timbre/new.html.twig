@@ -1,0 +1,11 @@
+{% extends '../base.html.twig' %}
+
+{% block title %}New Timbre{% endblock %}
+
+{% block body %}
+    <h1>Create new Timbre</h1>
+
+    {{ include('timbre/_form.html.twig') }}
+
+    <a href="{{ path('app_timbre_index') }}">back to list</a>
+{% endblock %}
