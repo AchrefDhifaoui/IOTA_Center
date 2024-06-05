@@ -172,7 +172,7 @@ class FactureController extends AbstractController
         // Vérifier si un fichier a été téléchargé
         if ($fichierPDF) {
             // Générer un nom de fichier unique
-            $nomFichier = md5(uniqid()).'.'.$fichierPDF->guessExtension();
+            $nomFichier = md5(uniqid()) . 'Controller' .$fichierPDF->guessExtension();
 
             try {
                 // Déplacer le fichier vers le répertoire de stockage
@@ -294,7 +294,7 @@ class FactureController extends AbstractController
 
         // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
         if ($nomFichierJoint) {
-            $cheminFichierJoint = $this->getParameter('facture_directory').'/'.$nomFichierJoint;
+            $cheminFichierJoint = $this->getParameter('facture_directory') . 'FactureController.php/' .$nomFichierJoint;
             if (file_exists($cheminFichierJoint)) {
                 unlink($cheminFichierJoint);
             }

@@ -232,7 +232,7 @@ class FactureAchatController extends AbstractController
 
         // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
         if ($nomFichierJoint) {
-            $cheminFichierJoint = $this->getParameter('factureAchat_directory').'/'.$nomFichierJoint;
+            $cheminFichierJoint = $this->getParameter('factureAchat_directory') . 'FactureAchatController.php/' .$nomFichierJoint;
             if (file_exists($cheminFichierJoint)) {
                 unlink($cheminFichierJoint);
             }

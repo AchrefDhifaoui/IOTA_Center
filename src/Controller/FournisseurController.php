@@ -146,7 +146,7 @@ class FournisseurController extends AbstractController
 
         // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
         if ($nomFichierJoint) {
-            $cheminFichierJoint = $this->getParameter('fournisseur_directory').'/'.$nomFichierJoint;
+            $cheminFichierJoint = $this->getParameter('fournisseur_directory') . 'FournisseurController.php/' .$nomFichierJoint;
             if (file_exists($cheminFichierJoint)) {
                 unlink($cheminFichierJoint);
             }

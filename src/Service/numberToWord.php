@@ -17,13 +17,13 @@ class numberToWord{
         }elseif (strlen($number) == 3) {
             $_number.= $this->threewwLength($number);
         }elseif (strlen($number) == 4) {
-            $_number.= $this->moreThanThreeLength(substr($number,0,1),3).$this->and.$this->threewwLength(substr($number,1,3),true);
+            $_number.= $this->moreThanThreeLength(substr($number, 0, 1), 3) . $this->and .$this->threewwLength(substr($number,1,3),true);
         }elseif (strlen($number) == 5) {
-            $_number.= $this->moreThanThreeLength(substr($number,0,2),4).$this->and.$this->threewwLength(substr($number,2,3),true);
+            $_number.= $this->moreThanThreeLength(substr($number, 0, 2), 4) . $this->and .$this->threewwLength(substr($number,2,3),true);
         }elseif (strlen($number) == 6) {
-            $_number.= $this->moreThanThreeLength(substr($number,0,3),6).$this->and.$this->threewwLength(substr($number,3,3),false);
+            $_number.= $this->moreThanThreeLength(substr($number, 0, 3), 6) . $this->and .$this->threewwLength(substr($number,3,3),false);
         }elseif (strlen($number) == 7) {
-            $_number.= $this->moreThanThreeLength(substr($number,0,1),7).$this->and.$this->threewwLength(substr($number,1,3),true,$this->nameByDiget(6)).$this->and.$this->threewwLength(substr($number,4,3));
+            $_number.= $this->moreThanThreeLength(substr($number, 0, 1), 7) . $this->and .$this->threewwLength(substr($number,1,3),true,$this->nameByDiget(6)).$this->and.$this->threewwLength(substr($number,4,3));
         }
 
         return trim($_number,$this->and);
@@ -41,7 +41,7 @@ class numberToWord{
             $_number = $this->forOneToTwntteyNew($number);
         }else{
             if(substr($number,1,1) > 0){
-                $_number .= $this->digetWithAl(substr($number,1,1)).$this->and;
+                $_number .= $this->digetWithAl(substr($number, 1, 1)) . $this->and;
             }
             $_number .= $this->betwwenTwentyAndHundred(substr($number,0,1));
         }
@@ -88,7 +88,7 @@ class numberToWord{
             case 4:
                 {
                     if($number <= 10 && $number > 0){
-                        $_number .= $this->forOneToTwntteyNew($number).' '.$this->nameByDiget(4);
+                        $_number .= $this->forOneToTwntteyNew($number) . ' numberToWord.php' .$this->nameByDiget(4);
                     }
                 }
                 break;
@@ -96,7 +96,7 @@ class numberToWord{
                 {
 
                     if($number <= 100 && $number > 0){
-                        $_number .= $this->threewwLength($number,true ).' '.$this->nameByDiget(6);
+                        $_number .= $this->threewwLength($number, true) . ' numberToWord.php' .$this->nameByDiget(6);
                     }
                 }
                 break;
@@ -107,7 +107,7 @@ class numberToWord{
                         if($number == 1 || $number == 2){
                             $_number .= $this->moreMilone($number);
                         }else{
-                            $_number .= $this->oneLength($number).' '.$this->nameByDiget(7);
+                            $_number .= $this->oneLength($number) . ' numberToWord.php' .$this->nameByDiget(7);
                         }
 
                     }

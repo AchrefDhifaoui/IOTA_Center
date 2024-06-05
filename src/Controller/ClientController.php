@@ -151,7 +151,7 @@ class ClientController extends AbstractController
 
         // Si un fichier joint est associé à la facture, supprimer le fichier du répertoire de stockage
         if ($nomFichierJoint) {
-            $cheminFichierJoint = $this->getParameter('client_directory').'/'.$nomFichierJoint;
+            $cheminFichierJoint = $this->getParameter('client_directory') . 'ClientController.php/' .$nomFichierJoint;
             if (file_exists($cheminFichierJoint)) {
                 unlink($cheminFichierJoint);
             }
